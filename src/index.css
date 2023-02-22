@@ -2,22 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components {
-    .container {
-        @apply w-8/12 mx-auto
-    }
-    .modal-done {
-        @apply inset-0 flex justify-center items-center bg-gray-300/60 fixed
-         invisible opacity-0 transition duration-200
-    }
+  .container {
+    @apply w-9/12 mx-auto;
+  }
+  .modal-done {
+    @apply inset-0 flex justify-center items-center bg-gray-300/60 fixed
+         invisible opacity-0 transition duration-200;
+  }
 
-    .modal-done-open {
-        @apply visible opacity-100
-    }
+  .modal-done-open {
+    @apply visible opacity-100;
+  }
 }
 
 body {
-    box-shadow: 0 0 0 100vmax #f3f3f3 ;
-    background-color: #f3f3f3;
+  box-shadow: 0 0 0 100vmax #f3f3f3;
+  background-color: #f3f3f3;
 }
