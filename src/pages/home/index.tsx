@@ -15,7 +15,7 @@ import { Teleport } from '@/component/teleport';
 import * as API from '@/middleware/index';
 
 export default function Home() {
-  const { data, isFetching } = useQuery({
+  const { data, status } = useQuery({
     queryKey: ['getActivity'],
     queryFn: async () => await API.getActivity(),
     cacheTime: 12000,
@@ -66,15 +66,15 @@ export default function Home() {
               data_cy={'activity-add-button'}
             />
           </div>
-          <div className='mt-14 flex flex-wrap gap-3 justify-center'>
-            {isFetching ? (
+          <ul className='mt-14 flex flex-wrap gap-3 justify-center'>
+            {status === 'loading' ? (
               <p>Loading ....</p>
             ) : data?.data.length === 0 ? (
               <EmptyIcon clickHandlers={() => handlePost.mutate()} />
             ) : (
               data?.data?.map((obj, i) => <ActivityItem key={i} {...obj} />)
             )}
-          </div>
+          </ul>
         </section>
       </Layout>
       {/* Modal group */}
@@ -84,7 +84,7 @@ export default function Home() {
         deleteHandler={() =>
           handleDelete.mutate({ id: state.deleteActivityItem._id })
         }
-        deleteCencel={() => cencelDelete()}
+        deleteCencel={cencelDelete}
       />
 
       <ModalSuccess isOpen={isOpenModalDone} data_cy={'modal-information'} />

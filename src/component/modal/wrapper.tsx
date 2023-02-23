@@ -1,17 +1,27 @@
+import ReactDOM from 'react-dom';
+
 type Props = {
   children: React.ReactNode;
-  clickOutsideFunc: () => void;
+  isShow: boolean;
+  clickOutside?: () => void;
 };
 
-export const Wrapper: React.FC<Props> = ({ children, clickOutsideFunc }) => {
-  return (
+export const Wrapper: React.FC<Props> = ({
+  children,
+  isShow,
+  clickOutside,
+}) => {
+  if (!isShow) return null;
+
+  return ReactDOM.createPortal(
     <div
       role='dialog'
       aria-modal='true'
-      className='fixed inset-0 bg-black/30 flex items-start justify-center'
-      onClick={clickOutsideFunc}
+      className='fixed inset-0 flex justify-center'
     >
+      <div className='absolute inset-0 bg-black/30' onClick={clickOutside} />
       {children}
-    </div>
+    </div>,
+    document.body
   );
 };

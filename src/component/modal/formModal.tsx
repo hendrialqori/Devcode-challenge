@@ -8,7 +8,7 @@ import {
 import { PriorityDropDown } from '@/component/priorityDropDown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { Teleport } from '../teleport';
+import { Wrapper } from './wrapper';
 
 import * as API from '@/middleware';
 
@@ -73,9 +73,8 @@ export const ModalForm = (): JSX.Element => {
     resetFormData(dispatch);
   };
   return (
-    <Teleport isActive={state.toggleModal} clickOutside={toggleModalFunc}>
+    <Wrapper isShow={state.toggleModal} clickOutside={toggleModalFunc}>
       <div
-        onClick={(e) => e.stopPropagation()}
         className='rounded-md relative w-6/12 h-max bg-white mt-24'
         data-cy='modal-add'
       >
@@ -115,6 +114,6 @@ export const ModalForm = (): JSX.Element => {
           </button>
         </footer>
       </div>
-    </Teleport>
+    </Wrapper>
   );
 };

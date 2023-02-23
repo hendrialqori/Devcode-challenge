@@ -19,7 +19,7 @@ export const Todos: React.FC = (): JSX.Element => {
 
   const { state, dispatch } = useStoreContext();
 
-  const { data, isLoading } = useQuery({
+  const { data, status } = useQuery({
     queryKey: ['todos', state?.chooseTypeSorted],
     queryFn: async () => await API.getTodos({ id }),
     cacheTime: 0,
@@ -81,15 +81,22 @@ export const Todos: React.FC = (): JSX.Element => {
     default:
       Todos = data?.data;
   }
+
   return (
     <>
-      <ModalSuccess isOpen={isOpenModalDone} />
-      {isLoading && 'loading ....'}
-      {Todos?.length === 0 ? (
+      {status === 'loading' ? (
+        'loading ....'
+      ) : Todos?.length === 0 ? (
         <EmptyTodosIcon dispatch={dispatch} />
       ) : (
-        Todos?.map((todo: any, i: number) => <TodoItem key={i} {...todo} />)
+        <ul className='my-10'>
+          {Todos?.map((todo: any, i: number) => (
+            <TodoItem key={i} {...todo} />
+          ))}
+        </ul>
       )}
+
+      <ModalSuccess isOpen={isOpenModalDone} />
       <ModalDelete
         text='Apakah anda yakin menghapus List Item'
         title={state.deleteTodoItem.title}

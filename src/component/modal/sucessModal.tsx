@@ -1,4 +1,5 @@
 import { DoneIcon } from '@/assets/icon/doneIcon';
+import { Wrapper } from './wrapper';
 
 interface ModalDoneProps {
   isOpen: boolean;
@@ -11,15 +12,13 @@ export const ModalSuccess = ({
   data_cy = 'modal-information',
 }: ModalDoneProps): JSX.Element => {
   return (
-    <>
-      {isOpen ? (
-        <div className='modal-done-open modal-done' data-cy={data_cy}>
-          <div className='bg-white flex gap-3 items-center px-7 py-2 rounded-md'>
-            <DoneIcon />
-            <p>Activity berhasil dihapus</p>
-          </div>
+    <Wrapper isShow={isOpen}>
+      <div className='modal-done-open modal-done' data-cy={data_cy}>
+        <div className='bg-white flex gap-3 items-center px-7 py-2 rounded-md'>
+          <DoneIcon />
+          <p>Activity berhasil dihapus</p>
         </div>
-      ) : null}
-    </>
+      </div>
+    </Wrapper>
   );
 };

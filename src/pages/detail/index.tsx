@@ -6,10 +6,10 @@ import { SortedTodos } from '@/component/sortedTodos';
 import { toggleSorted, toggleModal } from '@/context/actions';
 import { useStoreContext } from '@/context/store';
 import { ModalForm } from '@/component/modal/formModal';
-import { ButtonEdit } from '@/component/button/editButton';
 import { ButtonAdd } from '@/component/button/addButton';
 import { ButtonSorted } from '@/component/button/sortedButton';
 import { ButtonBackHome } from '@/component/button/backHomeButton';
+import { PencilIcon } from '@/assets/icon/penciIcon';
 
 import * as API from '@/middleware';
 
@@ -47,21 +47,25 @@ const Detail: React.FC = () => {
       throw new Error('Error while submit form');
     }
   };
+
   return (
     <>
       <ModalForm />
       <Layout>
         <section onClick={() => setEditTitle(false)} className='container py-5'>
-          <header className='flex justify-between items-center'>
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className='flex items-center gap-4'
-            >
+          <div
+            className='flex justify-between items-center'
+            aria-label='top-side'
+          >
+            <div className='flex items-center gap-4'>
               <ButtonBackHome />
               {!isEditTitle ? (
                 <h1
                   className='text-3xl font-bold'
-                  onClick={() => setEditTitle(true)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditTitle(true);
+                  }}
                   data-cy='todo-title'
                 >
                   {title}
@@ -75,16 +79,24 @@ const Detail: React.FC = () => {
                       if (e.keyCode === 13) await handleSubmit();
                     }}
                     type='text'
-                    className='border-b-[1px] border-gray-300 outline-none bg-transparent px-1 text-3xl font-bold'
+                    className='z-[-1] relative border-b-[1px] border-gray-300 outline-none bg-transparent px-1 text-3xl font-bold'
+                    autoFocus
                   />
-                  <ButtonEdit clickHandlers={handleSubmit} types='large' />
+                  <button onClick={handleSubmit}>
+                    <PencilIcon types='large' />
+                  </button>
                 </>
               )}
               {isEditTitle || (
-                <ButtonEdit
-                  clickHandlers={() => setEditTitle(true)}
-                  types='large'
-                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditTitle(true);
+                  }}
+                  data-cy='todo-title-edit-button'
+                >
+                  <PencilIcon types='large' />
+                </button>
               )}
             </div>
             <div
@@ -101,10 +113,10 @@ const Detail: React.FC = () => {
                 data_cy={'todo-add-button'}
               />
             </div>
-          </header>
-          <section className='my-10'>
-            <Todos />
-          </section>
+          </div>
+          {/* Todo list */}
+          <Todos />
+          {/* Todo list */}
         </section>
       </Layout>
     </>

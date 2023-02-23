@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { PriorityColorRound } from '@/component/priorityColorRound';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ButtonDelete } from '@/component/button/deleteButton';
-import { ButtonEdit } from '@/component/button/editButton';
+import { TrashIcon } from '@/assets/icon/trashIcon';
 import { useStoreContext } from '@/context/store';
 import {
   editTodoItemId,
@@ -13,6 +13,7 @@ import {
 } from '@/context/actions';
 
 import * as API from '@/middleware';
+import { PencilIcon } from '@/assets/icon/penciIcon';
 
 interface TodoItemProps {
   id: number;
@@ -77,7 +78,7 @@ export const TodoItem = ({
   };
 
   return (
-    <div
+    <li
       data-cy='todo-item'
       key={id}
       className='w-full bg-white rounded-md shadow-md flex justify-between items-center px-6 py-5 mt-2'
@@ -98,12 +99,16 @@ export const TodoItem = ({
         >
           {title}
         </h2>
-        <ButtonEdit clickHandlers={() => handleEditTodo()} types='small' />
+        <button onClick={handleEditTodo} data-cy='todo-item-edit-button'>
+          <PencilIcon types='small' />
+        </button>
       </div>
-      <ButtonDelete
-        clickHandlers={() => deleteTodo(id, title)}
-        data_cy={'todo-item-delete-button'}
-      />
-    </div>
+      <button
+        onClick={() => deleteTodo(id, title)}
+        data-cy='todo-item-delete-button'
+      >
+        <TrashIcon />
+      </button>
+    </li>
   );
 };

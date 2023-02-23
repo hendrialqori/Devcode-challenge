@@ -3,6 +3,8 @@ import { DateFormater } from '@/utils/dateFormater';
 import { useStoreContext } from '@/context/store';
 import { openModalAlertDelete, deleteActivityItem } from '@/context/actions';
 import { useNavigate } from 'react-router-dom';
+import { TrashIcon } from '@/assets/icon/trashIcon';
+import { MouseEventHandler } from 'react';
 
 interface ActivityItemProps {
   id: number;
@@ -21,16 +23,21 @@ export const ActivityItem = ({
 
   const handleDelete = (): void => {
     openModalAlertDelete(dispatch);
+
     deleteActivityItem(dispatch, {
       _id: id,
       title,
     });
   };
   return (
-    <section
+    <li
       onClick={() => navigate(`/detail/${id}`)}
+      onKeyDown={(e) => {
+        e.keyCode === 13 && navigate(`/detail/${id}`);
+      }}
       className='flex flex-col justify-between rounded-md shadow-md w-[205px] h-[200px] p-5 bg-white cursor-pointer'
       data-cy='activity-item'
+      tabIndex={0}
     >
       <h2 className='font-bold text-lg' data-cy='activity-item-title'>
         {title}
@@ -45,11 +52,10 @@ export const ActivityItem = ({
         >
           {DateFormater(new Date(created_at))}
         </p>
-        <ButtonDelete
-          clickHandlers={handleDelete}
-          data_cy={'activity-item-delete-button'}
-        />
+        <button onClick={handleDelete} data-cy='activity-item-delete-button'>
+          <TrashIcon />
+        </button>
       </div>
-    </section>
+    </li>
   );
 };
