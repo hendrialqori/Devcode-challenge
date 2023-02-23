@@ -7,7 +7,6 @@ import {
   RESETFORMDATA,
   EDITTODOITEMID,
   RESETEDITTODO,
-  TRIGGEREDUPDATETODO,
   OPENMODALDELETE,
   DELETETODOITEM,
   DELETEACTIVITYITEM,
@@ -58,9 +57,6 @@ export const editTodoItemId = (
 
 export const resetEdiTodo = (dispatch: DispatchTypes): void =>
   dispatch({ type: RESETEDITTODO });
-
-export const triggeredUpdateTodo = (dispatch: DispatchTypes): void =>
-  dispatch({ type: TRIGGEREDUPDATETODO });
 
 export const openModalAlertDelete = (dispatch: DispatchTypes): void =>
   dispatch({ type: OPENMODALDELETE });

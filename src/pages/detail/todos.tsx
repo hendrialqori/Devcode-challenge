@@ -6,7 +6,6 @@ import { ModalDelete } from '@/component/modal/deleteModal';
 import {
   openModalAlertDelete,
   deleteTodoItem,
-  triggeredUpdateTodo,
   toggleModal,
 } from '@/context/actions';
 import EmptyTodos from '@/assets/svg/empty2.svg';
@@ -37,18 +36,13 @@ export const Todos: React.FC = (): JSX.Element => {
     }, 1500);
   };
 
-  const deleteTodo = useMutation(
-    ['todos', state.deleteTodoItem._id],
-    API.deleteItemTodo,
-    {
-      onSuccess: () => {
-        openModalAlertDelete(dispatch);
-        triggeredUpdateTodo(dispatch);
-        handleModalDone();
-        void queryClient.invalidateQueries();
-      },
-    }
-  );
+  const deleteTodo = useMutation(API.deleteItemTodo, {
+    onSuccess: () => {
+      openModalAlertDelete(dispatch);
+      handleModalDone();
+      queryClient.invalidateQueries(['todos']);
+    },
+  });
   const deleteTodoItemFunc = (): void => {
     deleteTodo.mutate({ id: state.deleteTodoItem._id });
   };

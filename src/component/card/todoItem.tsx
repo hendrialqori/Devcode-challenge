@@ -77,12 +77,12 @@ export const TodoItem = ({
   };
 
   return (
-    <section
+    <div
       data-cy='todo-item'
       key={id}
       className='w-full bg-white rounded-md shadow-md flex justify-between items-center px-6 py-5 mt-2'
     >
-      <section className='flex items-center gap-3'>
+      <div className='flex items-center gap-3'>
         <input
           type='checkbox'
           checked={isChecked}
@@ -99,11 +99,11 @@ export const TodoItem = ({
           {title}
         </h2>
         <ButtonEdit clickHandlers={() => handleEditTodo()} types='small' />
-      </section>
+      </div>
       <ButtonDelete
         clickHandlers={() => deleteTodo(id, title)}
         data_cy={'todo-item-delete-button'}
       />
-    </section>
+    </div>
   );
 };

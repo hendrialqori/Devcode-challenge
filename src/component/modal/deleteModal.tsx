@@ -1,6 +1,6 @@
-import { Wrapper } from './wrapper';
 import { AlertIcon } from '@/assets/icon/alertIcon';
 import { useStoreContext } from '@/context/store';
+import { Teleport } from '../teleport';
 
 interface IProps {
   title: string;
@@ -33,38 +33,43 @@ export const ModalDelete: React.FC<IProps> = ({
 
   return (
     <>
-      {state.openModalAlertDelete ? (
-        <Wrapper>
-          <div className='rounded-md relative w-4/12 bg-white py-4 mt-24'>
-            <header data-cy='modal-delete-icon' className='w-max mx-auto py-4'>
-              <AlertIcon />
-            </header>
-            <section
-              data-cy='modal-delete-title'
-              className='text-center font-semibold py-4'
+      <Teleport
+        isActive={state.openModalAlertDelete}
+        clickOutside={deleteCencel}
+      >
+        <div
+          className='rounded-md relative w-4/12 h-max bg-white py-4 mt-24'
+          data-cy='modal-delete'
+          onClick={(e) => e.stopPropagation()}
+        >
+          <header data-cy='modal-delete-icon' className='w-max mx-auto py-4'>
+            <AlertIcon />
+          </header>
+          <section
+            data-cy='modal-delete-title'
+            className='text-center font-semibold py-4'
+          >
+            <p>{text}</p>
+            <h3>&quot;{title}&quot;?</h3>
+          </section>
+          <div className='px-5 flex items-center justify-center gap-4 py-4'>
+            <button
+              data-cy='modal-delete-cencel-button'
+              onClick={cencelModal}
+              className='py-2 px-7 rounded-full bg-gray-200 font-semibold'
             >
-              <p>{text}</p>
-              <h3>&quot;{title}&quot;?</h3>
-            </section>
-            <div className='px-5 flex items-center justify-center gap-4 py-4'>
-              <button
-                data-cy='modal-delete-cencel-button'
-                onClick={cencelModal}
-                className='py-2 px-7 rounded-full bg-gray-200 font-semibold'
-              >
-                Batal
-              </button>
-              <button
-                data-cy='modal-delete-confirm-button'
-                onClick={deleteItem}
-                className='py-2 px-7 rounded-full text-white bg-rose-500 font-semibold'
-              >
-                Hapus
-              </button>
-            </div>
+              Batal
+            </button>
+            <button
+              data-cy='modal-delete-confirm-button'
+              onClick={deleteItem}
+              className='py-2 px-7 rounded-full text-white bg-rose-500 font-semibold'
+            >
+              Hapus
+            </button>
           </div>
-        </Wrapper>
-      ) : null}
+        </div>
+      </Teleport>
     </>
   );
 };

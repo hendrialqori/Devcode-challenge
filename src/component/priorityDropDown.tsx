@@ -45,15 +45,19 @@ export const PriorityDropDown = ({
   handlePriority,
 }: PriorityDDProps): JSX.Element => {
   const [isOpenDD, setOpenDD] = useState<boolean>(false);
+
   const [priorityIdx, setPriorityIdx] = useState<number>(1);
+
   const { state, dispatch } = useStoreContext();
 
   const handleChangeState = (
     priorityIdx: number,
     priorityTypes: string
   ): void => {
-    setPriorityIdx((prev) => priorityIdx);
+    setPriorityIdx(priorityIdx);
+
     handlePriority(priorityTypes);
+
     setOpenDD(false);
   };
 
@@ -70,11 +74,14 @@ export const PriorityDropDown = ({
     <>
       <div
         data-cy='modal-add-priority-dropdown'
-        onClick={() => setOpenDD((prev: boolean) => !prev)}
         className='border-[1px] w-[180px] flex justify-between py-[.60rem] px-3'
-        role='button'
+        role='listbox'
         tabIndex={0}
-        aria-hidden='true'
+        onClick={() => setOpenDD((prev: boolean) => !prev)}
+        onKeyDown={(e) => {
+          if (e.keyCode === 13) setOpenDD(true);
+        }}
+        // aria-hidden='true'
       >
         <h1 className='flex items-center gap-5'>
           <PriorityColorRound types={Priority[priorityIdx - 1]?.types} />
@@ -84,16 +91,21 @@ export const PriorityDropDown = ({
       </div>
       {isOpenDD && (
         <div className='absolute bg-white'>
-          {Priority.map((obj: PriorityTypes, i: number) => (
-            <button
-              data-cy='modal-add-priority-item'
+          {Priority.map((obj: PriorityTypes, i) => (
+            <span
               key={i}
-              onClick={() => handleChangeState(obj.id, obj.types)}
+              data-cy='modal-add-priority-item'
               className='border-[1px] w-[180px] flex items-center gap-5 py-[.60rem] px-3'
+              role='listitem'
+              tabIndex={0}
+              onClick={() => handleChangeState(obj.id, obj.types)}
+              onKeyDown={(e) => {
+                if (e.keyCode === 13) handleChangeState(obj.id, obj.types);
+              }}
             >
               <PriorityColorRound types={obj.types} />
               <p className='text-gray-600'>{obj.title}</p>
-            </button>
+            </span>
           ))}
         </div>
       )}

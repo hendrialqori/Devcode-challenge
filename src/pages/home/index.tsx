@@ -10,6 +10,7 @@ import { ActivityItem } from '@/component/card/activityItem';
 import { ModalSuccess } from '@/component/modal/sucessModal';
 import { EmptyIcon } from '@/assets/icon/emptyIcon';
 import { ModalDelete } from '@/component/modal/deleteModal';
+import { Teleport } from '@/component/teleport';
 
 import * as API from '@/middleware/index';
 
@@ -21,6 +22,8 @@ export default function Home() {
   });
 
   const { state, dispatch } = useStoreContext();
+
+  const [activeTeleport, setActiveTeleport] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -51,43 +54,41 @@ export default function Home() {
   };
 
   return (
-    <Layout>
-      <section className='container py-5'>
-        <div className='flex justify-between items-center'>
-          <h1 className='text-3xl font-bold' data-cy='activity-title'>
-            Activity
-          </h1>
-          <ButtonAdd
-            clickHandlers={() => handlePost.mutate()}
-            data_cy={'activity-add-button'}
-          />
-        </div>
-        <div className='mt-14 flex flex-wrap gap-3 justify-center'>
-          {isFetching ? (
-            <p>Loading ....</p>
-          ) : data?.data.length === 0 ? (
-            <EmptyIcon clickHandlers={() => handlePost.mutate()} />
-          ) : (
-            data?.data?.map((obj, i) => <ActivityItem key={i} {...obj} />)
-          )}
+    <>
+      <Layout>
+        <section className='container py-5'>
+          <div className='flex justify-between items-center'>
+            <h1 className='text-3xl font-bold' data-cy='activity-title'>
+              Activity
+            </h1>
+            <ButtonAdd
+              clickHandlers={() => handlePost.mutate()}
+              data_cy={'activity-add-button'}
+            />
+          </div>
+          <div className='mt-14 flex flex-wrap gap-3 justify-center'>
+            {isFetching ? (
+              <p>Loading ....</p>
+            ) : data?.data.length === 0 ? (
+              <EmptyIcon clickHandlers={() => handlePost.mutate()} />
+            ) : (
+              data?.data?.map((obj, i) => <ActivityItem key={i} {...obj} />)
+            )}
+          </div>
+        </section>
+      </Layout>
+      {/* Modal group */}
+      <ModalDelete
+        title={state.deleteActivityItem.title}
+        text={'Apakah anda yakin menghapus activity'}
+        deleteHandler={() =>
+          handleDelete.mutate({ id: state.deleteActivityItem._id })
+        }
+        deleteCencel={() => cencelDelete()}
+      />
 
-          {/* Modal group */}
-          <ModalDelete
-            title={state.deleteActivityItem.title}
-            text={'Apakah anda yakin menghapus activity'}
-            deleteHandler={() =>
-              handleDelete.mutate({ id: state.deleteActivityItem._id })
-            }
-            deleteCencel={() => cencelDelete()}
-          />
-
-          <ModalSuccess
-            isOpen={isOpenModalDone}
-            data_cy={'modal-information'}
-          />
-          {/* Modal group */}
-        </div>
-      </section>
-    </Layout>
+      <ModalSuccess isOpen={isOpenModalDone} data_cy={'modal-information'} />
+      {/* Modal group */}
+    </>
   );
 }

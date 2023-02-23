@@ -7,7 +7,6 @@ import {
   RESETFORMDATA,
   EDITTODOITEMID,
   RESETEDITTODO,
-  TRIGGEREDUPDATETODO,
   DELETETODOITEM,
   OPENMODALDELETE,
   DELETEACTIVITYITEM,
@@ -27,10 +26,7 @@ export type ActionTypes =
       payload: { _id: number; priorityValue: string };
     }
   | {
-      type:
-        | typeof RESETEDITTODO
-        | typeof TRIGGEREDUPDATETODO
-        | typeof OPENMODALDELETE;
+      type: typeof RESETEDITTODO | typeof OPENMODALDELETE;
     }
   | { type: typeof DELETETODOITEM; payload: { _id: number; title: string } }
   | {
@@ -120,11 +116,6 @@ const reducers: React.Reducer<InitilaStateProps, ActionTypes> = (
           priorityValue: 'very-high',
         },
       };
-    case TRIGGEREDUPDATETODO:
-      return {
-        ...state,
-        triggeredUpdateTodo: !state.triggeredUpdateTodo,
-      };
     case OPENMODALDELETE:
       return {
         ...state,
@@ -165,9 +156,3 @@ export const ContextProvider = ({
 };
 
 export const useStoreContext = (): StoreProps => useContext(Store);
-
-// : [InitilaStateProps, React.Dispatch<ActionTypes>] => {
-//   const { state, dispatch } = useContext(Store)
-
-//   return [state, dispatch]
-// }

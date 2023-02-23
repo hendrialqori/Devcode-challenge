@@ -6,12 +6,10 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps): JSX.Element => {
   return (
-    <div>
-      <main className='font-Poppins'>
-        <Headers />
-        {children}
-      </main>
-    </div>
+    <main className='font-Poppins' id='root2'>
+      <Headers />
+      {children}
+    </main>
   );
 };
 

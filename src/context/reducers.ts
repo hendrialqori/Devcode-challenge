@@ -5,7 +5,6 @@ export const CHANGEFORMDATA = 'changeFormData';
 export const RESETFORMDATA = 'resetFormData';
 export const EDITTODOITEMID = 'editTodoItemID';
 export const RESETEDITTODO = 'resetTodoItem';
-export const TRIGGEREDUPDATETODO = 'triggeredUpdateTodo';
 export const DELETETODOITEM = 'deleteTodoItem';
 export const OPENMODALDELETE = 'openModalDelete';
 export const DELETEACTIVITYITEM = 'deleteActivityItem';

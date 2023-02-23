@@ -15,8 +15,11 @@ import * as API from '@/middleware';
 
 const Detail: React.FC = () => {
   const { dispatch } = useStoreContext();
+
   const [title, setTitle] = useState<string>('');
+
   const [isEditTitle, setEditTitle] = useState<boolean>(false);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -45,56 +48,66 @@ const Detail: React.FC = () => {
     }
   };
   return (
-    <Layout>
-      <section className='container py-5'>
-        <header className='flex justify-between items-center'>
-          <div className='flex items-center gap-4'>
-            <ButtonBackHome />
-            {!isEditTitle ? (
-              <h1
-                className='text-3xl font-bold'
-                onClick={() => setEditTitle(true)}
-                data-cy='todo-title'
-              >
-                {title}
-              </h1>
-            ) : (
-              <>
-                <input
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  type='text'
-                  className='border-b-[1px] border-gray-300 outline-none bg-transparent px-1 text-3xl font-bold'
+    <>
+      <ModalForm />
+      <Layout>
+        <section onClick={() => setEditTitle(false)} className='container py-5'>
+          <header className='flex justify-between items-center'>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className='flex items-center gap-4'
+            >
+              <ButtonBackHome />
+              {!isEditTitle ? (
+                <h1
+                  className='text-3xl font-bold'
+                  onClick={() => setEditTitle(true)}
+                  data-cy='todo-title'
+                >
+                  {title}
+                </h1>
+              ) : (
+                <>
+                  <input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    onKeyDown={async (e) => {
+                      if (e.keyCode === 13) await handleSubmit();
+                    }}
+                    type='text'
+                    className='border-b-[1px] border-gray-300 outline-none bg-transparent px-1 text-3xl font-bold'
+                  />
+                  <ButtonEdit clickHandlers={handleSubmit} types='large' />
+                </>
+              )}
+              {isEditTitle || (
+                <ButtonEdit
+                  clickHandlers={() => setEditTitle(true)}
+                  types='large'
                 />
-                <ButtonEdit clickHandlers={handleSubmit} types='large' />
-              </>
-            )}
-            {isEditTitle || (
-              <ButtonEdit
-                clickHandlers={() => setEditTitle(true)}
-                types='large'
+              )}
+            </div>
+            <div
+              className='flex items-center gap-5'
+              aria-label='button-wrapper'
+            >
+              <ButtonSorted clickHandlers={toggleSortedFunc} />
+
+              <SortedTodos />
+              {/* Sorted components will open when triggered from ButtonSorted */}
+
+              <ButtonAdd
+                clickHandlers={toggleModalFunc}
+                data_cy={'todo-add-button'}
               />
-            )}
-          </div>
-          <div className='flex items-center gap-5' aria-label='button-wrapper'>
-            <ButtonSorted clickHandlers={toggleSortedFunc} />
-
-            <SortedTodos />
-            {/* Sorted components will open when triggered from ButtonSorted */}
-
-            <ButtonAdd
-              clickHandlers={toggleModalFunc}
-              data_cy={'todo-add-button'}
-            />
-            <ModalForm />
-            {/* Toggle Modal triggered */}
-          </div>
-        </header>
-        <section className='my-10'>
-          <Todos />
+            </div>
+          </header>
+          <section className='my-10'>
+            <Todos />
+          </section>
         </section>
-      </section>
-    </Layout>
+      </Layout>
+    </>
   );
 };
 
