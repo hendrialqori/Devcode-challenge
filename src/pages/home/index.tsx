@@ -23,8 +23,6 @@ export default function Home() {
 
   const { state, dispatch } = useStoreContext();
 
-  const [activeTeleport, setActiveTeleport] = useState(false);
-
   const queryClient = useQueryClient();
 
   const [isOpenModalDone, setOpenModalDone] = useState<boolean>(false);
@@ -87,7 +85,7 @@ export default function Home() {
         deleteCencel={cencelDelete}
       />
 
-      <ModalSuccess isOpen={isOpenModalDone} data_cy={'modal-information'} />
+      <ModalSuccess isOpen={isOpenModalDone} />
       {/* Modal group */}
     </>
   );

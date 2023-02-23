@@ -19,8 +19,11 @@ export const Wrapper: React.FC<Props> = ({
       aria-modal='true'
       className='fixed inset-0 flex justify-center'
     >
-      <div className='absolute inset-0 bg-black/30' onClick={clickOutside} />
       {children}
+      <div
+        className='absolute inset-0 bg-black/30 z-[-1]'
+        onClick={clickOutside}
+      />
     </div>,
     document.body
   );

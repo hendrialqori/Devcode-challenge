@@ -50,16 +50,16 @@ export const ModalDelete: React.FC<IProps> = ({
         </div>
         <div className='px-5 flex items-center justify-center gap-4 py-4'>
           <button
-            data-cy='modal-delete-cencel-button'
             onClick={cencelModal}
             className='py-2 px-7 rounded-full bg-gray-200 font-semibold'
+            data-cy='modal-delete-cancel-button'
           >
             Batal
           </button>
           <button
-            data-cy='modal-delete-confirm-button'
             onClick={deleteItem}
             className='py-2 px-7 rounded-full text-white bg-rose-500 font-semibold'
+            data-cy='modal-delete-confirm-button'
           >
             Hapus
           </button>

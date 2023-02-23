@@ -32,12 +32,8 @@ export const ActivityItem = ({
   return (
     <li
       onClick={() => navigate(`/detail/${id}`)}
-      onKeyDown={(e) => {
-        e.keyCode === 13 && navigate(`/detail/${id}`);
-      }}
       className='flex flex-col justify-between rounded-md shadow-md w-[205px] h-[200px] p-5 bg-white cursor-pointer'
       data-cy='activity-item'
-      tabIndex={0}
     >
       <h2 className='font-bold text-lg' data-cy='activity-item-title'>
         {title}
