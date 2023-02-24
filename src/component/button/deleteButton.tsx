@@ -1,16 +1,10 @@
 import { TrashIcon } from '@/assets/icon/trashIcon';
 
-interface IButtonDeleteProps {
-  clickHandlers?: () => void;
-  data_cy: string;
-}
+type Props = React.ComponentProps<'button'>;
 
-export const ButtonDelete = ({
-  clickHandlers,
-  data_cy,
-}: IButtonDeleteProps) => {
+export const ButtonDelete: React.FC<Props> = ({ ...rest }) => {
   return (
-    <button onClick={clickHandlers} data-cy={data_cy}>
+    <button {...rest}>
       <TrashIcon />
     </button>
   );

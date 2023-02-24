@@ -103,12 +103,10 @@ export const TodoItem = ({
           <PencilIcon types='small' />
         </button>
       </div>
-      <button
+      <ButtonDelete
         onClick={() => deleteTodo(id, title)}
         data-cy='todo-item-delete-button'
-      >
-        <TrashIcon />
-      </button>
+      />
     </li>
   );
 };

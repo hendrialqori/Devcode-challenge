@@ -8,7 +8,8 @@ import { useStoreContext } from '@/context/store';
 import { ModalForm } from '@/component/modal/formModal';
 import { ButtonAdd } from '@/component/button/addButton';
 import { ButtonSorted } from '@/component/button/sortedButton';
-import { ButtonBackHome } from '@/component/button/backHomeButton';
+import { ArrowIcon } from '@/assets/icon/arrowIcon';
+import { Link } from 'react-router-dom';
 import { PencilIcon } from '@/assets/icon/penciIcon';
 
 import * as API from '@/middleware';
@@ -58,7 +59,10 @@ const Detail: React.FC = () => {
             aria-label='top-side'
           >
             <div className='flex items-center gap-4'>
-              <ButtonBackHome />
+              <Link to='/' data-cy='todo-back-button'>
+                <ArrowIcon />
+              </Link>
+
               {!isEditTitle ? (
                 <h1
                   className='text-3xl font-bold'
@@ -108,10 +112,7 @@ const Detail: React.FC = () => {
               <SortedTodos />
               {/* Sorted components will open when triggered from ButtonSorted */}
 
-              <ButtonAdd
-                clickHandlers={toggleModalFunc}
-                data_cy={'todo-add-button'}
-              />
+              <ButtonAdd onClick={toggleModalFunc} data-cy='todo-add-button' />
             </div>
           </div>
           {/* Todo list */}

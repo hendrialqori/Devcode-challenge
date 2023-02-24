@@ -1,10 +1,8 @@
-import { ButtonDelete } from '@/component/button/deleteButton';
 import { DateFormater } from '@/utils/dateFormater';
 import { useStoreContext } from '@/context/store';
 import { openModalAlertDelete, deleteActivityItem } from '@/context/actions';
 import { useNavigate } from 'react-router-dom';
-import { TrashIcon } from '@/assets/icon/trashIcon';
-import { MouseEventHandler } from 'react';
+import { ButtonDelete } from '../button/deleteButton';
 
 interface ActivityItemProps {
   id: number;
@@ -48,9 +46,10 @@ export const ActivityItem = ({
         >
           {DateFormater(new Date(created_at))}
         </p>
-        <button onClick={handleDelete} data-cy='activity-item-delete-button'>
-          <TrashIcon />
-        </button>
+        <ButtonDelete
+          onClick={handleDelete}
+          data-cy='activity-item-delete-button'
+        />
       </div>
     </li>
   );

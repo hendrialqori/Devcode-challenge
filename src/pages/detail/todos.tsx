@@ -86,11 +86,11 @@ export const Todos: React.FC = (): JSX.Element => {
     <>
       {status === 'loading' ? (
         'loading ....'
-      ) : Todos?.length === 0 ? (
+      ) : Todos.length === 0 ? (
         <EmptyTodosIcon dispatch={dispatch} />
       ) : (
         <ul className='my-10'>
-          {Todos?.map((todo: any, i: number) => (
+          {Todos.map((todo: any, i: number) => (
             <TodoItem key={i} {...todo} />
           ))}
         </ul>

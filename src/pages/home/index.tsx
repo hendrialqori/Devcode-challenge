@@ -60,8 +60,8 @@ export default function Home() {
               Activity
             </h1>
             <ButtonAdd
-              clickHandlers={() => handlePost.mutate()}
-              data_cy={'activity-add-button'}
+              onClick={() => handlePost.mutate()}
+              data-cy='activity-add-button'
             />
           </div>
           <ul className='mt-14 flex flex-wrap gap-3 justify-center'>

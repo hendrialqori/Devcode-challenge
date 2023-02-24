@@ -1,19 +1,12 @@
 import { PlusIcon } from '@/assets/icon/plusIcon';
 
-interface ButtonProps {
-  clickHandlers?: () => void;
-  data_cy: string;
-}
+type Props = React.ComponentProps<'button'>;
 
-export const ButtonAdd = ({
-  clickHandlers,
-  data_cy,
-}: ButtonProps): JSX.Element => {
+export const ButtonAdd: React.FC<Props> = ({ ...rest }) => {
   return (
     <button
       className='flex items-center bg-sky-500 hover:bg-sky-600 p-2 px-3 rounded-full'
-      onClick={clickHandlers}
-      data-cy={data_cy}
+      {...rest}
     >
       <PlusIcon />
       <p className='text-white'>Tambah</p>
