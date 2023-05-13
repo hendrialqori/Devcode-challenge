@@ -15,7 +15,6 @@ export const ModalSuccess = memo(
         <div
           className='flex justify-center items-center'
           data-cy='modal-information'
-          onClick={clickOutside}
         >
           <div className='bg-white flex gap-3 items-center px-7 py-2 rounded-md h-max'>
             <DoneIcon />
