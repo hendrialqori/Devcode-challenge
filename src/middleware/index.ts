@@ -1,19 +1,15 @@
-import type { IActivityItem } from '@/types';
+import type { ActivityItem } from '@/types';
 
 const Endpoint = 'https://todo.api.devcode.gethired.id' as const;
 
 export const getActivity = async (): Promise<
   | {
-      data: IActivityItem[];
+      data: ActivityItem[];
     }
   | undefined
 > => {
   const URL = `${Endpoint}/activity-groups?email=teamhendri18@gmail.com`;
   const request = await fetch(URL);
-
-  if (!request.ok) {
-    throw new Error('Failed to fetch data from server');
-  }
   return await request.json();
 };
 
@@ -29,10 +25,6 @@ export const postActivity = async (): Promise<any> => {
       title: 'New Activity',
     }),
   });
-
-  if (!request.ok) {
-    throw new Error('Failed to fetch data from server');
-  }
   return await request.json();
 };
 
@@ -45,9 +37,6 @@ export const deleteActivity = async ({ id }: { id: number }): Promise<any> => {
     },
   });
 
-  if (!request.ok) {
-    throw new Error('Failed to fetch data from server');
-  }
   return await request.json();
 };
 
@@ -55,9 +44,6 @@ export const getTodosTitle = async (id: string | undefined): Promise<any> => {
   const URL = `${Endpoint}/activity-groups/${id}`;
   const request = await fetch(URL);
 
-  if (!request.ok) {
-    throw new Error('Failed to fetch data from server');
-  }
   return await request.json();
 };
 

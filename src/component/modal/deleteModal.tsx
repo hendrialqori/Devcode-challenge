@@ -1,22 +1,21 @@
 import { AlertIcon } from '@/assets/icon/alertIcon';
-import { useStoreContext } from '@/context/store';
 import { Wrapper } from './wrapper';
 
-interface IProps {
+interface Props {
+  isOpen: boolean;
   title: string;
   text: string;
   deleteHandler: () => void;
   deleteCencel: () => void;
 }
 
-export const ModalDelete: React.FC<IProps> = ({
+export const ModalDelete: React.FC<Props> = ({
+  isOpen,
   title,
   text,
   deleteHandler,
   deleteCencel,
 }) => {
-  const { state } = useStoreContext();
-
   const cencelModal = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
@@ -32,7 +31,7 @@ export const ModalDelete: React.FC<IProps> = ({
   };
 
   return (
-    <Wrapper isShow={state.openModalAlertDelete} clickOutside={deleteCencel}>
+    <Wrapper isShow={isOpen} clickOutside={deleteCencel}>
       <div
         className='rounded-md relative w-6/12 lg:w-4/12 h-max bg-white py-4 mt-28'
         data-cy='modal-delete'

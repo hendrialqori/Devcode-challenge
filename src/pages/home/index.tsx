@@ -1,29 +1,31 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
-import { useStoreContext } from '@/context/store';
-import { openModalAlertDelete, deleteActivityItem } from '@/context/actions';
 
 import Layout from '@/template/layout';
 import { ButtonAdd } from '@/component/button/addButton';
-import { ActivityItem } from '@/component/card/activityItem';
+import { ActivityItemCard } from '@/component/card/activityItem';
 import { ModalSuccess } from '@/component/modal/sucessModal';
 import { EmptyIcon } from '@/assets/icon/emptyIcon';
 import { ModalDelete } from '@/component/modal/deleteModal';
-import { Teleport } from '@/component/teleport';
 
 import * as API from '@/middleware/index';
+
+import type { ActivityItem } from '@/types';
 
 export default function Home() {
   const { data, status } = useQuery({
     queryKey: ['getActivity'],
     queryFn: async () => await API.getActivity(),
-    cacheTime: 12000,
   });
 
-  const { state, dispatch } = useStoreContext();
-
   const queryClient = useQueryClient();
+
+  const [deleteActivity, setDeleteActivity] = useState<
+    Omit<ActivityItem, 'created_at'>
+  >({
+    id: 0,
+    title: '',
+  });
 
   const [isOpenModalDone, setOpenModalDone] = useState<boolean>(false);
 
@@ -33,23 +35,44 @@ export default function Home() {
     },
   });
 
-  const handleDelete = useMutation(API.deleteActivity, {
-    onSuccess: () => {
-      openModalAlertDelete(dispatch);
-      void queryClient.invalidateQueries(['getActivity']);
-      setOpenModalDone(true);
+  const { mutate: deleteActivityItem } = useMutation(API.deleteActivity);
 
-      setTimeout(() => setOpenModalDone(false), 1500);
+  const handleDelete = useCallback(() => {
+    deleteActivityItem(
+      { id: deleteActivity.id },
+      {
+        onSuccess: () => {
+          void queryClient.invalidateQueries(['getActivity']);
+
+          // clear state deleteActivity
+          setDeleteActivity({
+            id: 0,
+            title: '',
+          });
+
+          setOpenModalDone(true);
+        },
+      }
+    );
+  }, [deleteActivity]);
+
+  const handleGetDataDelete = useCallback(
+    (params: Omit<ActivityItem, 'created_at'>) => {
+      setDeleteActivity(params);
     },
-  });
+    []
+  );
 
-  const cencelDelete = (): void => {
-    openModalAlertDelete(dispatch);
-    deleteActivityItem(dispatch, {
-      _id: 0,
+  const cencelDelete = useCallback((): void => {
+    setDeleteActivity({
+      id: 0,
       title: '',
     });
-  };
+  }, []);
+
+  const closeModalSuccess = useCallback(() => {
+    setOpenModalDone(false);
+  }, []);
 
   return (
     <>
@@ -70,22 +93,28 @@ export default function Home() {
             ) : data?.data.length === 0 ? (
               <EmptyIcon clickHandlers={() => handlePost.mutate()} />
             ) : (
-              data?.data?.map((obj, i) => <ActivityItem key={i} {...obj} />)
+              data?.data?.map((obj, i) => (
+                <ActivityItemCard
+                  key={i}
+                  {...obj}
+                  actionDelete={handleGetDataDelete}
+                />
+              ))
             )}
           </ul>
         </section>
       </Layout>
+
       {/* Modal group */}
       <ModalDelete
-        title={state.deleteActivityItem.title}
+        isOpen={!!deleteActivity.id && !!deleteActivity.title}
         text={'Apakah anda yakin menghapus activity'}
-        deleteHandler={() =>
-          handleDelete.mutate({ id: state.deleteActivityItem._id })
-        }
+        title={deleteActivity.title}
+        deleteHandler={handleDelete}
         deleteCencel={cencelDelete}
       />
 
-      <ModalSuccess isOpen={isOpenModalDone} />
+      <ModalSuccess isOpen={isOpenModalDone} clickOutside={closeModalSuccess} />
       {/* Modal group */}
     </>
   );

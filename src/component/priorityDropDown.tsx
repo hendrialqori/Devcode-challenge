@@ -3,17 +3,19 @@ import { UpArrowIcon } from '@/assets/icon/upArrowIcon';
 import { DownArrowIcon } from '@/assets/icon/downArrowIcon';
 import { PriorityColorRound } from './priorityColorRound';
 import { useStoreContext } from '@/context/store';
+import { PriorityType } from '@/types';
 
-interface PriorityDDProps {
-  handlePriority: (p: string) => void;
+interface Props {
+  priorityDefault: string;
+  handlePriority: (priority: PriorityType) => void;
 }
 
-interface PriorityTypes {
+interface Priority {
   id: number;
   title: 'Very High' | 'High' | 'Medium' | 'Low' | 'Very Low';
-  types: 'very-high' | 'high' | 'normal' | 'low' | 'very-low';
+  types: PriorityType;
 }
-const Priority: PriorityTypes[] = [
+const Priority: Priority[] = [
   {
     id: 1,
     title: 'Very High',
@@ -42,17 +44,16 @@ const Priority: PriorityTypes[] = [
 ];
 
 export const PriorityDropDown = ({
+  priorityDefault,
   handlePriority,
-}: PriorityDDProps): JSX.Element => {
+}: Props): JSX.Element => {
   const [isOpenDD, setOpenDD] = useState<boolean>(false);
 
   const [priorityIdx, setPriorityIdx] = useState<number>(1);
 
-  const { state, dispatch } = useStoreContext();
-
   const handleChangeState = (
     priorityIdx: number,
-    priorityTypes: string
+    priorityTypes: PriorityType
   ): void => {
     setPriorityIdx(priorityIdx);
 
@@ -62,13 +63,11 @@ export const PriorityDropDown = ({
   };
 
   useEffect(() => {
-    const priority = Priority.find(
-      (obj) => obj.types === state.editTodoItem.priorityValue
-    );
+    const priority = Priority.find((obj) => obj.types === priorityDefault);
     if (priority != null) {
       setPriorityIdx(priority.id);
     }
-  }, [state.editTodoItem.priorityValue, dispatch]);
+  }, [priorityDefault]);
 
   return (
     <>
@@ -91,7 +90,7 @@ export const PriorityDropDown = ({
       </div>
       {isOpenDD && (
         <div className='absolute bg-white'>
-          {Priority.map((obj: PriorityTypes, i) => (
+          {Priority.map((obj: Priority, i) => (
             <span
               key={i}
               data-cy='modal-add-priority-item'

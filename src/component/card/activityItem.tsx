@@ -1,32 +1,20 @@
 import { DateFormater } from '@/utils/dateFormater';
-import { useStoreContext } from '@/context/store';
-import { openModalAlertDelete, deleteActivityItem } from '@/context/actions';
 import { useNavigate } from 'react-router-dom';
 import { ButtonDelete } from '../button/deleteButton';
+import type { ActivityItem } from '@/types';
 
-interface ActivityItemProps {
-  id: number;
-  title: string;
-  created_at: string;
-}
+type Props = ActivityItem & {
+  actionDelete: (params: Pick<ActivityItem, 'id' | 'title'>) => void;
+};
 
-export const ActivityItem = ({
+export const ActivityItemCard = ({
   id,
   title,
   created_at,
-}: ActivityItemProps): JSX.Element => {
-  const { dispatch } = useStoreContext();
-
+  actionDelete,
+}: Props): JSX.Element => {
   const navigate = useNavigate();
 
-  const handleDelete = (): void => {
-    openModalAlertDelete(dispatch);
-
-    deleteActivityItem(dispatch, {
-      _id: id,
-      title,
-    });
-  };
   return (
     <li
       onClick={() => navigate(`/detail/${id}`)}
@@ -47,7 +35,9 @@ export const ActivityItem = ({
           {DateFormater(new Date(created_at))}
         </p>
         <ButtonDelete
-          onClick={handleDelete}
+          onClick={() => {
+            actionDelete({ id, title });
+          }}
           data-cy='activity-item-delete-button'
         />
       </div>

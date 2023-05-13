@@ -1,86 +1,109 @@
-import { useStoreContext } from '@/context/store';
-import {
-  toggleModal,
-  changeFormData,
-  resetFormData,
-  resetEdiTodo,
-} from '@/context/actions';
 import { PriorityDropDown } from '@/component/priorityDropDown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { Wrapper } from './wrapper';
 
 import * as API from '@/middleware';
+import { PriorityType, Todo } from '@/types';
 
-export const ModalForm = (): JSX.Element => {
-  const { state, dispatch } = useStoreContext();
+interface Props {
+  ishow: boolean;
+  mode: 'create' | 'update';
+  toggle: () => void;
+  dataForm: Pick<Todo, 'id' | 'title' | 'priority'>;
+  setDataForm: React.Dispatch<
+    React.SetStateAction<Pick<Todo, 'id' | 'title' | 'priority'>>
+  >;
+}
 
+export const ModalForm = ({
+  ishow,
+  mode,
+  toggle,
+  dataForm,
+  setDataForm,
+}: Props): JSX.Element => {
   const { id } = useParams();
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    changeFormData(dispatch, {
-      ...state.formData,
+    setDataForm((prev) => ({
+      ...prev,
       title: e.target.value,
-    });
+    }));
   };
 
-  const handlePriority = (p: string): void => {
-    changeFormData(dispatch, {
-      ...state.formData,
-      priority: p,
-    });
+  const handlePriority = (priority: PriorityType): void => {
+    setDataForm((prev) => ({
+      ...prev,
+      priority,
+    }));
   };
 
   const queryClient = useQueryClient();
 
-  const PostTodos = useMutation(API.postTodos, {
-    onSuccess: () => {
-      resetFormData(dispatch);
+  const { mutate: createTodo, isLoading: loadCreate } = useMutation(
+    API.postTodos,
+    {
+      onSuccess: () => {
+        setDataForm({
+          id: 0,
+          title: '',
+          priority: 'very-high',
+        });
 
-      toggleModal(dispatch);
+        toggle();
 
-      queryClient.invalidateQueries(['todos']);
-    },
-  });
-  const UpdateTodos = useMutation(API.updateTodos, {
-    onSuccess: () => {
-      resetFormData(dispatch);
-      toggleModal(dispatch);
-      resetEdiTodo(dispatch);
-      void queryClient.invalidateQueries(['todos']);
-    },
-  });
+        queryClient.invalidateQueries(['todos']);
+      },
+    }
+  );
+  const { mutate: updateTodo, isLoading: loadUpdate } = useMutation(
+    API.updateTodos,
+    {
+      onSuccess: () => {
+        setDataForm({
+          id: 0,
+          title: '',
+          priority: 'very-high',
+        });
 
-  const handleSumbmitForm = (): any => {
-    if (state.editTodoItem._id === null) {
-      PostTodos.mutate({
+        toggle();
+
+        void queryClient.invalidateQueries(['todos']);
+      },
+    }
+  );
+
+  const handleSumbmitForm = (): void => {
+    if (mode === 'create') {
+      createTodo({
         activity_group_id: id!,
-        title: state.formData.title,
-        priority: state.formData.priority,
+        title: dataForm.title,
+        priority: dataForm.priority,
       });
       return;
     }
 
-    UpdateTodos.mutate({
-      id: state.editTodoItem._id,
-      title: state.formData.title,
-      priority: state.formData.priority,
-    });
+    if (mode === 'update') {
+      updateTodo({
+        id: dataForm.id,
+        title: dataForm.title,
+        priority: dataForm.priority,
+      });
+
+      return;
+    }
   };
 
-  const toggleModalFunc = (): void => {
-    toggleModal(dispatch);
-    resetFormData(dispatch);
-  };
   return (
-    <Wrapper isShow={state.toggleModal} clickOutside={toggleModalFunc}>
+    <Wrapper isShow={ishow} clickOutside={toggle}>
       <div
         className='rounded-md relative w-6/12 h-max bg-white mt-24'
         data-cy='modal-add'
       >
         <header className='flex items-center justify-between p-5 border-b-[1px] border-gray-300'>
           <h3 className='text-md font-semibold'>Tambah List Item</h3>
-          <button onClick={toggleModalFunc} className='text-lg font-bold'>
+          <button onClick={toggle} className='text-lg font-bold'>
             ✕
           </button>
         </header>
@@ -90,7 +113,7 @@ export const ModalForm = (): JSX.Element => {
               Nama List Item
             </label>
             <input
-              value={state.formData.title}
+              value={dataForm.title}
               onChange={handleTitle}
               className='rounded-md p-3 border-[1px] border-gray-400 outline-sky-400'
               id='t'
@@ -100,17 +123,22 @@ export const ModalForm = (): JSX.Element => {
           </div>
           <div className='grid gap-2 '>
             <label className='text-xs font-semibold'>PRIORITY</label>
-            <PriorityDropDown handlePriority={handlePriority} />
+            <PriorityDropDown
+              priorityDefault={dataForm.priority}
+              handlePriority={handlePriority}
+            />
           </div>
         </section>
         <footer className='px-5 py-4 text-right'>
           <button
-            disabled={state.formData.title.length === 0}
+            disabled={!dataForm.title || loadCreate || loadUpdate}
             onClick={handleSumbmitForm}
-            className='py-2 px-5 rounded-full text-white bg-sky-500'
+            className={`py-2 px-5 rounded-full text-white ${
+              !dataForm.title ? 'bg-sky-500/50' : 'bg-sky-500 '
+            } `}
             data-cy='modal-add-save-button'
           >
-            Simpan
+            {loadCreate || loadUpdate ? 'loading' : 'Simpan'}
           </button>
         </footer>
       </div>

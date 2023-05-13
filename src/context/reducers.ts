@@ -1,10 +1,2 @@
 export const CHOOSINGTYPESORT = 'chooseTypeSort';
 export const TOGGLECHOOSINGSORT = 'toogleChoosingSort';
-export const TOGGLEMODAL = 'togglemodal';
-export const CHANGEFORMDATA = 'changeFormData';
-export const RESETFORMDATA = 'resetFormData';
-export const EDITTODOITEMID = 'editTodoItemID';
-export const RESETEDITTODO = 'resetTodoItem';
-export const DELETETODOITEM = 'deleteTodoItem';
-export const OPENMODALDELETE = 'openModalDelete';
-export const DELETEACTIVITYITEM = 'deleteActivityItem';

@@ -1,59 +1,95 @@
-import { memo, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { TodoItem } from '@/component/card/todoItem';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useStoreContext } from '@/context/store';
 import { ModalDelete } from '@/component/modal/deleteModal';
-import {
-  openModalAlertDelete,
-  deleteTodoItem,
-  toggleModal,
-} from '@/context/actions';
 import EmptyTodos from '@/assets/svg/empty2.svg';
 import { ModalSuccess } from '@/component/modal/sucessModal';
 import { useParams } from 'react-router-dom';
 
 import * as API from '@/middleware';
 
-export const Todos: React.FC = (): JSX.Element => {
+import type { ActivityItem, Todo } from '@/types';
+
+type Props = {
+  createTodo: () => void;
+  updateTodo: () => void;
+  setDataForm: React.Dispatch<
+    React.SetStateAction<Pick<Todo, 'id' | 'title' | 'priority'>>
+  >;
+};
+
+export const Todos: React.FC<Props> = ({
+  createTodo,
+  updateTodo,
+  setDataForm,
+}): JSX.Element => {
   const { id } = useParams();
 
-  const { state, dispatch } = useStoreContext();
+  const { state } = useStoreContext();
+
+  const queryClient = useQueryClient();
 
   const { data, status } = useQuery({
     queryKey: ['todos', state?.chooseTypeSorted],
     queryFn: async () => await API.getTodos({ id }),
-    cacheTime: 0,
   });
 
-  const queryClient = useQueryClient();
+  const { mutate: deleteTodo } = useMutation(API.deleteItemTodo);
 
-  const [isOpenModalDone, setOpenModalDone] = useState<boolean>(false);
+  const [todo, setTodo] = useState<Pick<Todo, 'id' | 'title'>>({
+    id: 0,
+    title: '',
+  });
 
-  const handleModalDone = (): void => {
-    setOpenModalDone(true);
-    setTimeout(() => {
-      setOpenModalDone(false);
-    }, 1500);
-  };
+  const [isOpenModalSuccess, setOpenModalSuccess] = useState<boolean>(false);
 
-  const deleteTodo = useMutation(API.deleteItemTodo, {
-    onSuccess: () => {
-      openModalAlertDelete(dispatch);
-      handleModalDone();
-      queryClient.invalidateQueries(['todos']);
+  const handleDelete = useCallback(() => {
+    deleteTodo(
+      {
+        id: todo.id,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['todos']);
+
+          // clear todo state
+          setTodo({
+            id: 0,
+            title: '',
+          });
+
+          setOpenModalSuccess(true);
+        },
+      }
+    );
+  }, [todo]);
+
+  const handleGetDataUpdate = useCallback(
+    (params: Pick<Todo, 'id' | 'title' | 'priority'>) => {
+      setDataForm({ ...params });
+      updateTodo();
     },
-  });
-  const deleteTodoItemFunc = (): void => {
-    deleteTodo.mutate({ id: state.deleteTodoItem._id });
-  };
+    []
+  );
 
-  const cencelDelete = (): void => {
-    openModalAlertDelete(dispatch);
-    deleteTodoItem(dispatch, {
-      _id: 0,
+  const handleGetDataDelete = useCallback(
+    (params: Omit<ActivityItem, 'created_at'>) => {
+      setTodo(params);
+    },
+    []
+  );
+
+  const cencelDelete = useCallback((): void => {
+    setTodo({
+      id: 0,
       title: '',
     });
-  };
+  }, []);
+
+  const closeModalSuccess = useCallback(() => {
+    setOpenModalSuccess(false);
+  }, []);
 
   let Todos;
   switch (state?.chooseTypeSorted) {
@@ -87,38 +123,38 @@ export const Todos: React.FC = (): JSX.Element => {
       {status === 'loading' ? (
         'loading ....'
       ) : Todos.length === 0 ? (
-        <EmptyTodosIcon dispatch={dispatch} />
+        <img
+          src={EmptyTodos}
+          className='w-[45%] pt-5 mx-auto cursor-pointer'
+          alt='empty-girl'
+          onClick={createTodo}
+          data-cy='todo-empty-state'
+        />
       ) : (
         <ul className='my-10'>
           {Todos.map((todo: any, i: number) => (
-            <TodoItem key={i} {...todo} />
+            <TodoItem
+              key={i}
+              {...todo}
+              actionUpdate={handleGetDataUpdate}
+              actionDelete={handleGetDataDelete}
+            />
           ))}
         </ul>
       )}
 
-      <ModalSuccess isOpen={isOpenModalDone} />
       <ModalDelete
+        isOpen={!!todo.id && !!todo.title}
         text='Apakah anda yakin menghapus List Item'
-        title={state.deleteTodoItem.title}
-        deleteHandler={() => deleteTodoItemFunc()}
-        deleteCencel={() => cencelDelete()}
+        title={todo.title}
+        deleteHandler={handleDelete}
+        deleteCencel={cencelDelete}
+      />
+
+      <ModalSuccess
+        isOpen={isOpenModalSuccess}
+        clickOutside={closeModalSuccess}
       />
     </>
   );
 };
-
-const EmptyTodosIcon = memo(function EmptyTodosIcon({
-  dispatch,
-}: {
-  dispatch: any;
-}) {
-  return (
-    <img
-      src={EmptyTodos}
-      className='w-[45%] pt-5 mx-auto cursor-pointer'
-      alt='empty-girl'
-      onClick={() => toggleModal(dispatch)}
-      data-cy='todo-empty-state'
-    />
-  );
-});

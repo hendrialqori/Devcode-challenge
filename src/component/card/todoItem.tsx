@@ -2,30 +2,13 @@ import { useEffect, useState } from 'react';
 import { PriorityColorRound } from '@/component/priorityColorRound';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ButtonDelete } from '@/component/button/deleteButton';
-import { TrashIcon } from '@/assets/icon/trashIcon';
+
 import { useStoreContext } from '@/context/store';
-import {
-  editTodoItemId,
-  toggleModal,
-  changeFormData,
-  openModalAlertDelete,
-  deleteTodoItem,
-} from '@/context/actions';
 
 import * as API from '@/middleware';
 import { PencilIcon } from '@/assets/icon/penciIcon';
 
-interface TodoItemProps {
-  id: number;
-  title: string;
-  is_active: number | boolean;
-  priority: 'very-high' | 'high' | 'normal' | 'low' | 'very-low';
-}
-
-interface UpdateTodosProps {
-  id: number;
-  checkedValue: boolean;
-}
+import type { Todo } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const TodoItem = ({
@@ -33,7 +16,9 @@ export const TodoItem = ({
   title,
   is_active,
   priority,
-}: TodoItemProps): JSX.Element => {
+  actionDelete,
+  actionUpdate,
+}: Todo): JSX.Element => {
   const [isChecked, setCheked] = useState<boolean>(
     is_active === 1 ? false : true
   );
@@ -57,26 +42,6 @@ export const TodoItem = ({
     update.mutate({ id, checkedValue: isChecked! });
   };
 
-  const deleteTodo = (id: number, title: string): void => {
-    openModalAlertDelete(dispatch);
-    deleteTodoItem(dispatch, {
-      _id: id,
-      title,
-    });
-  };
-
-  const handleEditTodo = (): void => {
-    editTodoItemId(dispatch, {
-      _id: id,
-      priorityValue: priority,
-    });
-    toggleModal(dispatch);
-    changeFormData(dispatch, {
-      title,
-      priority,
-    });
-  };
-
   return (
     <li
       data-cy='todo-item'
@@ -95,16 +60,19 @@ export const TodoItem = ({
         <PriorityColorRound types={priority} />
         <h2
           data-cy='todo-item-title'
-          className={`${isChecked && 'line-through text-gray-400'}`}
+          className={`${isChecked ? 'line-through text-gray-400' : null}`}
         >
           {title}
         </h2>
-        <button onClick={handleEditTodo} data-cy='todo-item-edit-button'>
+        <button
+          onClick={() => actionUpdate({ id, title, priority })}
+          data-cy='todo-item-edit-button'
+        >
           <PencilIcon types='small' />
         </button>
       </div>
       <ButtonDelete
-        onClick={() => deleteTodo(id, title)}
+        onClick={() => actionDelete({ id, title })}
         data-cy='todo-item-delete-button'
       />
     </li>

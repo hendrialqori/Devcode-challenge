@@ -10,6 +10,7 @@ const queryClient = new QueryClient();
 const _ROOT = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 _ROOT.render(
   <QueryClientProvider client={queryClient}>
     <ContextProvider>
