@@ -9,7 +9,7 @@ import { PriorityType, Todo } from '@/types';
 interface Props {
   ishow: boolean;
   mode: 'create' | 'update';
-  toggle: () => void;
+  toggleForm: () => void;
   dataForm: Pick<Todo, 'id' | 'title' | 'priority'>;
   setDataForm: React.Dispatch<
     React.SetStateAction<Pick<Todo, 'id' | 'title' | 'priority'>>
@@ -19,11 +19,13 @@ interface Props {
 export const ModalForm = ({
   ishow,
   mode,
-  toggle,
   dataForm,
+  toggleForm,
   setDataForm,
 }: Props): JSX.Element => {
   const { id } = useParams();
+
+  const queryClient = useQueryClient();
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setDataForm((prev) => ({
@@ -39,8 +41,6 @@ export const ModalForm = ({
     }));
   };
 
-  const queryClient = useQueryClient();
-
   const { mutate: createTodo, isLoading: loadCreate } = useMutation(
     API.postTodos,
     {
@@ -51,7 +51,7 @@ export const ModalForm = ({
           priority: 'very-high',
         });
 
-        toggle();
+        toggleForm();
 
         queryClient.invalidateQueries(['todos']);
       },
@@ -67,7 +67,7 @@ export const ModalForm = ({
           priority: 'very-high',
         });
 
-        toggle();
+        toggleForm();
 
         void queryClient.invalidateQueries(['todos']);
       },
@@ -96,14 +96,14 @@ export const ModalForm = ({
   };
 
   return (
-    <Wrapper isShow={ishow} clickOutside={toggle}>
+    <Wrapper isShow={ishow} clickOutside={toggleForm}>
       <div
         className='rounded-md relative w-6/12 h-max bg-white mt-24'
         data-cy='modal-add'
       >
         <header className='flex items-center justify-between p-5 border-b-[1px] border-gray-300'>
           <h3 className='text-md font-semibold'>Tambah List Item</h3>
-          <button onClick={toggle} className='text-lg font-bold'>
+          <button onClick={toggleForm} className='text-lg font-bold'>
             ✕
           </button>
         </header>
@@ -124,7 +124,7 @@ export const ModalForm = ({
           <div className='grid gap-2 '>
             <label className='text-xs font-semibold'>PRIORITY</label>
             <PriorityDropDown
-              priorityDefault={dataForm.priority}
+              value={dataForm.priority}
               handlePriority={handlePriority}
             />
           </div>

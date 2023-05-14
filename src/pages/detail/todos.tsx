@@ -30,12 +30,14 @@ export const Todos: React.FC<Props> = ({
 
   const queryClient = useQueryClient();
 
-  const { data, status } = useQuery({
+  const { data } = useQuery({
     queryKey: ['todos', state?.chooseTypeSorted],
     queryFn: async () => await API.getTodos({ id }),
   });
 
-  const { mutate: deleteTodo } = useMutation(API.deleteItemTodo);
+  const { mutate: deleteTodo, isLoading: loadDelete } = useMutation(
+    API.deleteItemTodo
+  );
 
   const [todo, setTodo] = useState<Pick<Todo, 'id' | 'title'>>({
     id: 0,
@@ -120,9 +122,7 @@ export const Todos: React.FC<Props> = ({
 
   return (
     <>
-      {status === 'loading' ? (
-        'loading ....'
-      ) : Todos.length === 0 ? (
+      {Todos?.length === 0 ? (
         <img
           src={EmptyTodos}
           className='w-[45%] pt-5 mx-auto cursor-pointer'
@@ -132,7 +132,7 @@ export const Todos: React.FC<Props> = ({
         />
       ) : (
         <ul className='my-10'>
-          {Todos.map((todo: any, i: number) => (
+          {Todos?.map((todo: any, i: number) => (
             <TodoItem
               key={i}
               {...todo}
@@ -147,6 +147,7 @@ export const Todos: React.FC<Props> = ({
         isOpen={!!todo.id && !!todo.title}
         text='Apakah anda yakin menghapus List Item'
         title={todo.title}
+        isLoading={loadDelete}
         deleteHandler={handleDelete}
         deleteCencel={cencelDelete}
       />

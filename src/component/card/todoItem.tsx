@@ -2,15 +2,11 @@ import { useEffect, useState } from 'react';
 import { PriorityColorRound } from '@/component/priorityColorRound';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ButtonDelete } from '@/component/button/deleteButton';
-
 import { useStoreContext } from '@/context/store';
-
 import * as API from '@/middleware';
 import { PencilIcon } from '@/assets/icon/penciIcon';
-
 import type { Todo } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const TodoItem = ({
   id,
   title,
@@ -23,23 +19,26 @@ export const TodoItem = ({
     is_active === 1 ? false : true
   );
 
-  const { state, dispatch } = useStoreContext();
+  const { state } = useStoreContext();
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     setCheked(is_active === 1 ? false : true);
   }, [is_active]);
 
-  const queryClient = useQueryClient();
-
-  const update = useMutation(API.updateCheckedTodo, {
-    onSuccess: () => {
-      void queryClient.invalidateQueries(['todos']);
-    },
-  });
+  const { mutate: updateChecked } = useMutation(API.updateCheckedTodo);
 
   const handleChecked = (): void => {
     setCheked((prev) => !prev);
-    update.mutate({ id, checkedValue: isChecked! });
+    updateChecked(
+      { id, checkedValue: isChecked! },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['todos']);
+        },
+      }
+    );
   };
 
   return (

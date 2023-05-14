@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
+import { FallbackLoading } from './component/fallback';
 
 const Home = lazy(async () => await import('./pages/home/index'));
 const Detail = lazy(async () => await import('./pages/detail'));
@@ -11,7 +12,7 @@ const App: React.FC = (): JSX.Element => {
         <Route
           path='/'
           element={
-            <Suspense>
+            <Suspense fallback={<FallbackLoading />}>
               <Home />
             </Suspense>
           }
@@ -19,7 +20,7 @@ const App: React.FC = (): JSX.Element => {
         <Route
           path='/detail/:id'
           element={
-            <Suspense>
+            <Suspense fallback={<FallbackLoading />}>
               <Detail />
             </Suspense>
           }

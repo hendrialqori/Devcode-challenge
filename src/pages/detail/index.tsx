@@ -6,8 +6,10 @@ import { Header } from './header';
 
 import type { Todo } from '@/types';
 
+type FormMode = 'create' | 'update';
+
 const Detail: React.FC = () => {
-  const [modeForm, setModeForm] = useState<'create' | 'update'>('create');
+  const [modeForm, setModeForm] = useState<FormMode>('create');
 
   const [isOpenForm, setOpenForm] = useState(false);
 
@@ -21,8 +23,17 @@ const Detail: React.FC = () => {
     priority: 'very-high',
   });
 
+  const toggleForm = useCallback(() => {
+    setOpenForm((prev) => !prev);
+    setDataForm({
+      id: 0,
+      title: '',
+      priority: 'very-high',
+    });
+  }, []);
+
   const showFormTodo = useCallback(
-    (mode: 'create' | 'update') => {
+    (mode: FormMode) => {
       if (mode === 'create') {
         setModeForm('create');
         toggleForm();
@@ -37,21 +48,12 @@ const Detail: React.FC = () => {
     [modeForm]
   );
 
-  const toggleForm = useCallback(() => {
-    setOpenForm((prev) => !prev);
-    setDataForm({
-      id: 0,
-      title: '',
-      priority: 'very-high',
-    });
-  }, []);
-
   return (
     <div className='min-h-screen' onClick={() => setEditTitle(false)}>
       <ModalForm
         ishow={isOpenForm}
         mode={modeForm}
-        toggle={toggleForm}
+        toggleForm={toggleForm}
         dataForm={dataForm}
         setDataForm={setDataForm}
       />

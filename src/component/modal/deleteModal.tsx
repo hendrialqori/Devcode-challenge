@@ -5,6 +5,7 @@ interface Props {
   isOpen: boolean;
   title: string;
   text: string;
+  isLoading: boolean;
   deleteHandler: () => void;
   deleteCencel: () => void;
 }
@@ -13,6 +14,7 @@ export const ModalDelete: React.FC<Props> = ({
   isOpen,
   title,
   text,
+  isLoading,
   deleteHandler,
   deleteCencel,
 }) => {
@@ -57,10 +59,13 @@ export const ModalDelete: React.FC<Props> = ({
           </button>
           <button
             onClick={deleteItem}
-            className='py-2 px-7 rounded-full text-white bg-rose-500 font-semibold'
+            disabled={isLoading}
+            className={`py-2 px-7 rounded-full text-white  font-semibold ${
+              isLoading ? 'bg-rose-500/50' : 'bg-rose-500'
+            }`}
             data-cy='modal-delete-confirm-button'
           >
-            Hapus
+            {isLoading ? 'loading' : 'Hapus'}
           </button>
         </div>
       </div>

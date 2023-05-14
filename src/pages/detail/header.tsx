@@ -104,6 +104,7 @@ export const Header = ({ createTodo, isEditTitle, setEditTitle }: Props) => {
 
       <div className='flex items-center gap-5' aria-label='button-wrapper'>
         <ButtonSorted clickHandlers={toggleSortedFunc} />
+
         <SortedTodos />
         {/* Sorted components will open when triggered from ButtonSorted */}
         <ButtonAdd onClick={createTodo} data-cy='todo-add-button' />

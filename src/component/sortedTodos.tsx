@@ -73,7 +73,7 @@ export const SortedTodos = () => {
 
   return (
     <>
-      {state.toggleSorted && (
+      {state.toggleSorted ? (
         <section className='absolute bg-white top-[180px] border-y-[1px] border-gray-300 rounded-lg w-44'>
           {sorted.map((sort) => (
             <button
@@ -90,7 +90,7 @@ export const SortedTodos = () => {
             </button>
           ))}
         </section>
-      )}
+      ) : null}
     </>
   );
 };

@@ -65,9 +65,6 @@ export const editTodoTitle = async ({
     }),
   });
 
-  if (!request.ok) {
-    throw new Error('Failed to fetch data from server');
-  }
   return await request.json();
 };
 
@@ -77,16 +74,15 @@ export const getTodos = async ({
   id: string | undefined;
 }): Promise<any> => {
   const URL = `${Endpoint}/todo-items?activity_group_id=${id}`;
+
   const request = await fetch(URL);
 
-  if (!request.ok) {
-    throw new Error('Failed to fetch data from server');
-  }
   return await request.json();
 };
 
 export const deleteItemTodo = async ({ id }: { id: number }): Promise<any> => {
   const URL = `${Endpoint}/todo-items/${id}`;
+
   const request = await fetch(URL, {
     method: 'DELETE',
     headers: {
@@ -94,9 +90,6 @@ export const deleteItemTodo = async ({ id }: { id: number }): Promise<any> => {
     },
   });
 
-  if (!request.ok) {
-    throw new Error('Failed to fetch data from server');
-  }
   return await request.json();
 };
 
@@ -107,17 +100,15 @@ export const updateCheckedTodo = async ({
   id: number;
   checkedValue: boolean;
 }) => {
-  try {
-    await fetch(`${Endpoint}/todo-items/${id}`, {
-      method: 'PATCH',
-      headers: new Headers({ 'content-type': 'application/json' }),
-      body: JSON.stringify({
-        is_active: checkedValue,
-      }),
-    });
-  } catch (error) {
-    throw new Error('Checked invalid!');
-  }
+  const request = await fetch(`${Endpoint}/todo-items/${id}`, {
+    method: 'PATCH',
+    headers: new Headers({ 'content-type': 'application/json' }),
+    body: JSON.stringify({
+      is_active: checkedValue,
+    }),
+  });
+
+  return request.json();
 };
 
 export const postTodos = async ({
@@ -129,21 +120,19 @@ export const postTodos = async ({
   title: string;
   priority: string;
 }): Promise<any> => {
-  try {
-    await fetch(`${Endpoint}/todo-items`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        activity_group_id,
-        title,
-        priority,
-      }),
-    });
-  } catch (error) {
-    throw new Error('Failed to add new todo');
-  }
+  const request = await fetch(`${Endpoint}/todo-items`, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      activity_group_id,
+      title,
+      priority,
+    }),
+  });
+
+  return request.json();
 };
 
 export const updateTodos = async ({
@@ -155,29 +144,13 @@ export const updateTodos = async ({
   title: string;
   priority: string;
 }): Promise<any> => {
-  try {
-    await fetch(`${Endpoint}/todo-items/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({ title, priority }),
-    });
-  } catch (error) {
-    throw new Error('Failed to add new todo');
-  }
-};
+  const request = await fetch(`${Endpoint}/todo-items/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({ title, priority }),
+  });
 
-// `https://todo.api.devcode.gethired.id/todo-items/${
-//         state.editTodoItem._id as number
-//       }`,
-//       {
-//         method: 'PATCH',
-//         headers: {
-//           'Content-type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           title: state.formData.title,
-//           priority: state.formData.priority,
-//         }),
-//       }
+  return request.json();
+};

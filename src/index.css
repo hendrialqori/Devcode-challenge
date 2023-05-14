@@ -6,14 +6,6 @@
   .container {
     @apply w-9/12 mx-auto;
   }
-  .modal-done {
-    @apply inset-0 flex justify-center items-center bg-gray-300/60 fixed
-         invisible opacity-0 transition duration-200;
-  }
-
-  .modal-done-open {
-    @apply visible opacity-100;
-  }
 }
 
 body {

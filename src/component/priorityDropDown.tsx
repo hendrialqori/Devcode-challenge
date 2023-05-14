@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import { UpArrowIcon } from '@/assets/icon/upArrowIcon';
 import { DownArrowIcon } from '@/assets/icon/downArrowIcon';
 import { PriorityColorRound } from './priorityColorRound';
-import { useStoreContext } from '@/context/store';
 import { PriorityType } from '@/types';
 
 interface Props {
-  priorityDefault: string;
+  value: string;
   handlePriority: (priority: PriorityType) => void;
 }
 
@@ -44,7 +43,7 @@ const Priority: Priority[] = [
 ];
 
 export const PriorityDropDown = ({
-  priorityDefault,
+  value,
   handlePriority,
 }: Props): JSX.Element => {
   const [isOpenDD, setOpenDD] = useState<boolean>(false);
@@ -63,24 +62,23 @@ export const PriorityDropDown = ({
   };
 
   useEffect(() => {
-    const priority = Priority.find((obj) => obj.types === priorityDefault);
+    const priority = Priority.find((obj) => obj.types === value);
     if (priority != null) {
       setPriorityIdx(priority.id);
     }
-  }, [priorityDefault]);
+  }, [value]);
 
   return (
     <>
       <div
         data-cy='modal-add-priority-dropdown'
-        className='border-[1px] w-[180px] flex justify-between py-[.60rem] px-3'
+        className='border-[1px] w-[180px] flex justify-between py-[.60rem] px-3 cursor-pointer'
         role='listbox'
         tabIndex={0}
         onClick={() => setOpenDD((prev: boolean) => !prev)}
         onKeyDown={(e) => {
           if (e.keyCode === 13) setOpenDD(true);
         }}
-        // aria-hidden='true'
       >
         <h1 className='flex items-center gap-5'>
           <PriorityColorRound types={Priority[priorityIdx - 1]?.types} />
@@ -94,7 +92,7 @@ export const PriorityDropDown = ({
             <span
               key={i}
               data-cy='modal-add-priority-item'
-              className='border-[1px] w-[180px] flex items-center gap-5 py-[.60rem] px-3'
+              className='border-[1px] w-[180px] flex items-center gap-5 py-[.60rem] px-3 cursor-pointer'
               role='listitem'
               tabIndex={0}
               onClick={() => handleChangeState(obj.id, obj.types)}

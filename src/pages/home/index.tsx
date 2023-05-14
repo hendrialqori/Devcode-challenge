@@ -35,7 +35,9 @@ export default function Home() {
     },
   });
 
-  const { mutate: deleteActivityItem } = useMutation(API.deleteActivity);
+  const { mutate: deleteActivityItem, isLoading: loadDelete } = useMutation(
+    API.deleteActivity
+  );
 
   const handleDelete = useCallback(() => {
     deleteActivityItem(
@@ -88,9 +90,7 @@ export default function Home() {
             />
           </div>
           <ul className='mt-14 flex flex-wrap gap-3 justify-center'>
-            {status === 'loading' ? (
-              <p>Loading ....</p>
-            ) : data?.data.length === 0 ? (
+            {data?.data.length === 0 ? (
               <EmptyIcon clickHandlers={() => handlePost.mutate()} />
             ) : (
               data?.data?.map((obj, i) => (
@@ -110,6 +110,7 @@ export default function Home() {
         isOpen={!!deleteActivity.id && !!deleteActivity.title}
         text={'Apakah anda yakin menghapus activity'}
         title={deleteActivity.title}
+        isLoading={loadDelete}
         deleteHandler={handleDelete}
         deleteCencel={cencelDelete}
       />

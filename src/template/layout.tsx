@@ -1,10 +1,10 @@
 import Headers from './header';
 
-interface LayoutProps {
+interface Props {
   children: React.ReactNode;
 }
 
-const Layout = ({ children }: LayoutProps): JSX.Element => {
+const Layout = ({ children }: Props): JSX.Element => {
   return (
     <main className='font-Poppins' id='root2'>
       <Headers />
