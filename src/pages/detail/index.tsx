@@ -90,6 +90,8 @@ const Detail: React.FC = () => {
   const updateDetailTitleClickOutside = () => {
     if (isEditTitle) {
       updateDetailTitleAction();
+      queryClient.invalidateQueries(['getActivity']);
+      setEditTitle(false);
       return;
     }
 

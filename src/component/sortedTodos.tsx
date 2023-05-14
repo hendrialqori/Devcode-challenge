@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { CheckListIcon } from '@/assets/icon/checklistIcon';
 import { NewerIcon } from '@/assets/icon/newerIcon';
 import { OlderIcon } from '@/assets/icon/olderIcon';
@@ -49,7 +49,7 @@ const Sorted: sort[] = [
   },
 ];
 
-export const SortedTodos = () => {
+export const SortedTodos = memo(() => {
   const { state, dispatch } = useStoreContext();
   const [sorted, setSorted] = useState(Sorted);
 
@@ -93,4 +93,4 @@ export const SortedTodos = () => {
       ) : null}
     </>
   );
-};
+});

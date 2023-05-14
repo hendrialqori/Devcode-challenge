@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowIcon } from '@/assets/icon/arrowIcon';
 import React, { useCallback } from 'react';
 import { PencilIcon } from '@/assets/icon/penciIcon';
@@ -7,6 +7,7 @@ import { SortedTodos } from '@/component/sortedTodos';
 import { ButtonAdd } from '@/component/button/addButton';
 import { toggleSorted } from '@/context/actions';
 import { useStoreContext } from '@/context/store';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   createTodo: () => void;
@@ -25,6 +26,8 @@ export const Header = ({
   setEditTitle,
   updateTitleAction,
 }: Props) => {
+  const queryClient = useQueryClient();
+
   const { dispatch } = useStoreContext();
 
   const toggleSortedFunc = useCallback(

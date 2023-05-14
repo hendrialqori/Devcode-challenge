@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
+import { useLocation } from 'react-router-dom';
 import Layout from '@/template/layout';
 import { ButtonAdd } from '@/component/button/addButton';
 import { ActivityItemCard } from '@/component/card/activityItem';

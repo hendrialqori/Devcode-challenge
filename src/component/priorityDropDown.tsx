@@ -3,6 +3,7 @@ import { UpArrowIcon } from '@/assets/icon/upArrowIcon';
 import { DownArrowIcon } from '@/assets/icon/downArrowIcon';
 import { PriorityColorRound } from './priorityColorRound';
 import { PriorityType } from '@/types';
+import { memo } from 'react';
 
 interface Props {
   value: string;
@@ -42,70 +43,69 @@ const Priority: Priority[] = [
   },
 ];
 
-export const PriorityDropDown = ({
-  value,
-  handlePriority,
-}: Props): JSX.Element => {
-  const [isOpenDD, setOpenDD] = useState<boolean>(false);
+export const PriorityDropDown = memo(
+  ({ value, handlePriority }: Props): JSX.Element => {
+    const [isOpenDD, setOpenDD] = useState<boolean>(false);
 
-  const [priorityIdx, setPriorityIdx] = useState<number>(1);
+    const [priorityIdx, setPriorityIdx] = useState<number>(1);
 
-  const handleChangeState = (
-    priorityIdx: number,
-    priorityTypes: PriorityType
-  ): void => {
-    setPriorityIdx(priorityIdx);
+    const handleChangeState = (
+      priorityIdx: number,
+      priorityTypes: PriorityType
+    ): void => {
+      setPriorityIdx(priorityIdx);
 
-    handlePriority(priorityTypes);
+      handlePriority(priorityTypes);
 
-    setOpenDD(false);
-  };
+      setOpenDD(false);
+    };
 
-  useEffect(() => {
-    const priority = Priority.find((obj) => obj.types === value);
-    if (priority != null) {
-      setPriorityIdx(priority.id);
-    }
-  }, [value]);
+    useEffect(() => {
+      const priority = Priority.find((obj) => obj.types === value);
+      if (priority != null) {
+        setPriorityIdx(priority.id);
+      }
+    }, [value]);
 
-  return (
-    <>
-      <div
-        data-cy='modal-add-priority-dropdown'
-        className='border-[1px] w-[180px] flex justify-between py-[.60rem] px-3 cursor-pointer'
-        role='listbox'
-        tabIndex={0}
-        onClick={() => setOpenDD((prev: boolean) => !prev)}
-        onKeyDown={(e) => {
-          if (e.keyCode === 13) setOpenDD(true);
-        }}
-      >
-        <h1 className='flex items-center gap-5'>
-          <PriorityColorRound types={Priority[priorityIdx - 1]?.types} />
-          {Priority[priorityIdx - 1]?.title}
-        </h1>
-        {isOpenDD ? <UpArrowIcon /> : <DownArrowIcon />}
-      </div>
-      {isOpenDD && (
-        <div className='absolute bg-white'>
-          {Priority.map((obj: Priority, i) => (
-            <span
-              key={i}
-              data-cy='modal-add-priority-item'
-              className='border-[1px] w-[180px] flex items-center gap-5 py-[.60rem] px-3 cursor-pointer'
-              role='listitem'
-              tabIndex={0}
-              onClick={() => handleChangeState(obj.id, obj.types)}
-              onKeyDown={(e) => {
-                if (e.keyCode === 13) handleChangeState(obj.id, obj.types);
-              }}
-            >
-              <PriorityColorRound types={obj.types} />
-              <p className='text-gray-600'>{obj.title}</p>
-            </span>
-          ))}
+    return (
+      <>
+        <div
+          data-cy='modal-add-priority-dropdown'
+          className='border-[1px] w-[180px] flex justify-between py-[.60rem] px-3 cursor-pointer'
+          role='listbox'
+          tabIndex={0}
+          onClick={() => setOpenDD((prev: boolean) => !prev)}
+          onKeyDown={(e) => {
+            if (e.keyCode === 13) setOpenDD(true);
+          }}
+        >
+          <h1 className='flex items-center gap-5'>
+            <PriorityColorRound types={Priority[priorityIdx - 1]?.types} />
+            {Priority[priorityIdx - 1]?.title}
+          </h1>
+          {isOpenDD ? <UpArrowIcon /> : <DownArrowIcon />}
         </div>
-      )}
-    </>
-  );
-};
+        {isOpenDD && (
+          <div className='absolute bg-white'>
+            {Priority.map((obj: Priority, i) => (
+              <span
+                key={i}
+                data-cy='modal-add-priority-item'
+                className='border-[1px] w-[180px] flex items-center gap-5 py-[.60rem] px-3 cursor-pointer'
+                role='listitem'
+                tabIndex={0}
+                onClick={() => handleChangeState(obj.id, obj.types)}
+                onKeyDown={(e) => {
+                  if (e.keyCode === 13) handleChangeState(obj.id, obj.types);
+                }}
+              >
+                <PriorityColorRound types={obj.types} />
+                <p className='text-gray-600'>{obj.title}</p>
+              </span>
+            ))}
+          </div>
+        )}
+      </>
+    );
+  }
+);
