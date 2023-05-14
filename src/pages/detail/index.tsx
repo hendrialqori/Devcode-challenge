@@ -3,8 +3,10 @@ import Layout from '@/template/layout';
 import { Todos } from './todos';
 import { ModalForm } from '@/component/modal/formModal';
 import { Header } from './header';
-
 import type { Todo } from '@/types';
+import { useParams } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import * as API from '@/middleware';
 
 type FormMode = 'create' | 'update';
 
@@ -48,8 +50,54 @@ const Detail: React.FC = () => {
     [modeForm]
   );
 
+  const { id } = useParams();
+
+  const queryClient = useQueryClient();
+
+  const [title, setTitle] = useState('');
+
+  const {} = useQuery({
+    queryKey: ['detail-title'],
+    queryFn: async () => await API.getTodosTitle(id),
+    onSuccess: (data) => {
+      setTitle(data.title);
+    },
+  });
+
+  const { mutate: updateDetailTitle } = useMutation(API.editTodoTitle);
+
+  const updateDetailTitleAction = () => {
+    updateDetailTitle(
+      {
+        id,
+        title,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['detail-title']);
+        },
+      }
+    );
+  };
+
+  const handleSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    updateDetailTitleAction();
+    setEditTitle(false);
+  };
+
+  const updateDetailTitleClickOutside = () => {
+    if (isEditTitle) {
+      updateDetailTitleAction();
+      return;
+    }
+
+    setEditTitle(false);
+  };
+
   return (
-    <div className='min-h-screen' onClick={() => setEditTitle(false)}>
+    <div className='min-h-screen' onClick={updateDetailTitleClickOutside}>
       <ModalForm
         ishow={isOpenForm}
         mode={modeForm}
@@ -61,7 +109,10 @@ const Detail: React.FC = () => {
       <Layout>
         <section className='container py-5'>
           <Header
+            title={title}
             isEditTitle={isEditTitle}
+            updateTitleAction={handleSubmit}
+            setTitle={setTitle}
             setEditTitle={setEditTitle}
             createTodo={() => showFormTodo('create')}
           />

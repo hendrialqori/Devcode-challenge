@@ -1,8 +1,6 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowIcon } from '@/assets/icon/arrowIcon';
-import * as API from '@/middleware';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { PencilIcon } from '@/assets/icon/penciIcon';
 import { ButtonSorted } from '@/component/button/sortedButton';
 import { SortedTodos } from '@/component/sortedTodos';
@@ -12,45 +10,22 @@ import { useStoreContext } from '@/context/store';
 
 interface Props {
   createTodo: () => void;
+  title: string;
   isEditTitle: boolean;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
   setEditTitle: React.Dispatch<React.SetStateAction<boolean>>;
+  updateTitleAction: (e: React.SyntheticEvent) => void;
 }
 
-export const Header = ({ createTodo, isEditTitle, setEditTitle }: Props) => {
+export const Header = ({
+  createTodo,
+  isEditTitle,
+  title,
+  setTitle,
+  setEditTitle,
+  updateTitleAction,
+}: Props) => {
   const { dispatch } = useStoreContext();
-
-  const { id } = useParams();
-
-  const queryClient = useQueryClient();
-
-  const [title, setTitle] = useState('');
-
-  const {} = useQuery({
-    queryKey: ['detail-title'],
-    queryFn: async () => await API.getTodosTitle(id),
-    onSuccess: (data) => {
-      setTitle(data.title);
-    },
-  });
-
-  const { mutate: updateDetailTitle } = useMutation(API.editTodoTitle);
-
-  const updateDetailTitleAction = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-
-    setEditTitle(false);
-    updateDetailTitle(
-      {
-        id,
-        title,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries(['detail-title']);
-        },
-      }
-    );
-  };
 
   const toggleSortedFunc = useCallback(
     () => toggleSorted(dispatch),
@@ -86,13 +61,14 @@ export const Header = ({ createTodo, isEditTitle, setEditTitle }: Props) => {
               </button>
             </div>
           ) : (
-            <form onSubmit={updateDetailTitleAction}>
+            <form onSubmit={updateTitleAction}>
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 type='text'
                 className='relative border-b-[1px] border-gray-300 outline-none bg-transparent px-1 text-3xl font-bold'
                 autoFocus
+                required
               />
               <button type='submit'>
                 <PencilIcon types='large' />
