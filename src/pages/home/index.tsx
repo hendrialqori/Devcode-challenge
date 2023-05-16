@@ -12,7 +12,7 @@ import * as API from '@/middleware/index';
 import type { ActivityItem } from '@/types';
 
 export default function Home() {
-  const { data } = useQuery({
+  const { data, isLoading: loadActivity } = useQuery({
     queryKey: ['getActivity'],
     queryFn: async () => await API.getActivity(),
   });
@@ -93,19 +93,23 @@ export default function Home() {
               data-cy='activity-add-button'
             />
           </div>
-          <ul className='mt-14 flex flex-wrap gap-3 justify-center'>
-            {data?.data.length === 0 ? (
-              <EmptyIcon clickHandlers={() => createActivity()} />
-            ) : (
-              data?.data?.map((obj, i) => (
-                <ActivityItemCard
-                  key={i}
-                  {...obj}
-                  actionDelete={handleGetDataDelete}
-                />
-              ))
-            )}
-          </ul>
+          {loadActivity ? (
+            <div className='h-screen bg-gray-100' />
+          ) : (
+            <ul className='mt-14 flex flex-wrap gap-3 justify-center'>
+              {data?.data.length === 0 ? (
+                <EmptyIcon clickHandlers={() => createActivity()} />
+              ) : (
+                data?.data?.map((obj, i) => (
+                  <ActivityItemCard
+                    key={i}
+                    {...obj}
+                    actionDelete={handleGetDataDelete}
+                  />
+                ))
+              )}
+            </ul>
+          )}
         </section>
       </Layout>
 

@@ -7,12 +7,13 @@ export const EmptyIcon = memo(function EmptyIcon({
   clickHandlers: () => void;
 }) {
   return (
-    <img
-      src={Empty}
-      className='w-[50%] pt-5 mx-auto cursor-pointer'
-      alt='empty-man'
-      onClick={clickHandlers}
-      data-cy='activity-empty-state'
-    />
+    <div data-cy='activity-empty-state' role='button'>
+      <img
+        src={Empty}
+        className='w-[50%] pt-5 mx-auto cursor-pointer'
+        alt='empty-man'
+        onClick={clickHandlers}
+      />
+    </div>
   );
 });

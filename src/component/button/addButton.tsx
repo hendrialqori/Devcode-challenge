@@ -16,7 +16,7 @@ export const ButtonAdd: React.FC<Props> = ({ isLoading, ...rest }) => {
           <p className='text-white'>Tambah</p>
         </>
       ) : (
-        <p className='text-white'>loading</p>
+        <p className='text-white'>loading ...</p>
       )}
     </button>
   );
