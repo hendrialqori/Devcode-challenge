@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useLocation } from 'react-router-dom';
 import Layout from '@/template/layout';
 import { ButtonAdd } from '@/component/button/addButton';
 import { ActivityItemCard } from '@/component/card/activityItem';
@@ -13,7 +12,7 @@ import * as API from '@/middleware/index';
 import type { ActivityItem } from '@/types';
 
 export default function Home() {
-  const { data, status } = useQuery({
+  const { data } = useQuery({
     queryKey: ['getActivity'],
     queryFn: async () => await API.getActivity(),
   });
@@ -29,11 +28,14 @@ export default function Home() {
 
   const [isOpenModalDone, setOpenModalDone] = useState<boolean>(false);
 
-  const handlePost = useMutation(API.postActivity, {
-    onSuccess: () => {
-      void queryClient.invalidateQueries(['getActivity']);
-    },
-  });
+  const { mutate: createActivity, isLoading: loadCreate } = useMutation(
+    API.postActivity,
+    {
+      onSuccess: () => {
+        void queryClient.invalidateQueries(['getActivity']);
+      },
+    }
+  );
 
   const { mutate: deleteActivityItem, isLoading: loadDelete } = useMutation(
     API.deleteActivity
@@ -85,13 +87,15 @@ export default function Home() {
               Activity
             </h1>
             <ButtonAdd
-              onClick={() => handlePost.mutate()}
+              onClick={() => createActivity()}
+              isLoading={loadCreate}
+              disabled={loadCreate}
               data-cy='activity-add-button'
             />
           </div>
           <ul className='mt-14 flex flex-wrap gap-3 justify-center'>
             {data?.data.length === 0 ? (
-              <EmptyIcon clickHandlers={() => handlePost.mutate()} />
+              <EmptyIcon clickHandlers={() => createActivity()} />
             ) : (
               data?.data?.map((obj, i) => (
                 <ActivityItemCard
