@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-import { FallbackLoading } from './component/fallback';
+import { FallbackLoading } from './components/fallback';
 
 const Home = lazy(async () => await import('./pages/home/index'));
 const Detail = lazy(async () => await import('./pages/detail'));

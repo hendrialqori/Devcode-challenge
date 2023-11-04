@@ -12,3 +12,11 @@ export type Todo = {
   actionDelete: (params: Pick<ActivityItem, 'id' | 'title'>) => void;
   actionUpdate: (params: Pick<Todo, 'id' | 'title' | 'priority'>) => void;
 } & Omit<ActivityItem, 'created_at'>;
+
+
+
+export type Activity = {
+  id: number;
+  title: string;
+  created_at: string;
+}

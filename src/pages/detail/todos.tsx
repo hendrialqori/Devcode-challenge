@@ -1,10 +1,10 @@
 import { memo, useCallback, useState } from 'react';
-import { TodoItem } from '@/component/card/todoItem';
+import { TodoItem } from '@/components/card/todoItem';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useStoreContext } from '@/context/store';
-import { ModalDelete } from '@/component/modal/deleteModal';
+import { ModalDelete } from '@/components/modal/modal-delete';
 import EmptyTodos from '@/assets/svg/empty2.svg';
-import { ModalSuccess } from '@/component/modal/sucessModal';
+import { ModalSuccess } from '@/components/modal/sucessModal';
 import { useParams } from 'react-router-dom';
 
 import * as API from '@/middleware';

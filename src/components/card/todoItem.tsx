@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react';
-import { PriorityColorRound } from '@/component/priorityColorRound';
+import { PriorityColorRound } from '@/components/priorityColorRound';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ButtonDelete } from '@/component/button/deleteButton';
+import { ButtonDelete } from '@/components/button/deleteButton';
 import { useStoreContext } from '@/context/store';
 import * as API from '@/middleware';
 import { PencilIcon } from '@/assets/icon/penciIcon';

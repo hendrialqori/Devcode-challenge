@@ -3,13 +3,11 @@ import ReactDOM from 'react-dom';
 type Props = {
   children: React.ReactNode;
   isShow: boolean;
-  clickOutside?: () => void;
 };
 
 export const Wrapper: React.FC<Props> = ({
   children,
   isShow,
-  clickOutside,
 }) => {
   if (!isShow) return null;
 
@@ -17,13 +15,9 @@ export const Wrapper: React.FC<Props> = ({
     <div
       role='dialog'
       aria-modal='true'
-      className='fixed inset-0 flex justify-center'
+      className='fixed inset-0 flex justify-center items-center bg-black/30'
     >
       {children}
-      <div
-        className='absolute inset-0 bg-black/30 z-[-1]'
-        onClick={clickOutside}
-      />
     </div>,
     document.body
   );

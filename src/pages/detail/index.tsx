@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import Layout from '@/template/layout';
 import { Todos } from './todos';
-import { ModalForm } from '@/component/modal/formModal';
+import { ModalForm } from '@/components/modal/formModal';
 import { Header } from './header';
 import type { Todo } from '@/types';
 import { useParams } from 'react-router-dom';
