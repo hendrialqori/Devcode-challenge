@@ -4,16 +4,20 @@ import { ButtonDelete } from '../button/deleteButton';
 import type { ActivityItem } from '@/types';
 
 type Props = ActivityItem & {
-  actionDelete: (params: Pick<ActivityItem, 'id' | 'title'>) => void;
+  onDelete: (params: Pick<ActivityItem, 'id' | 'title'>) => void;
 };
 
-export const ActivityItemCard = ({
-  id,
-  title,
-  created_at,
-  actionDelete,
-}: Props): JSX.Element => {
+export const ActivityItemCard = (props: Props) => {
+
+  const { id, title, created_at, onDelete } = props
+
   const navigate = useNavigate();
+
+  const handleStopPropagation = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()
+
+  const handleDelete = () => {
+    onDelete({ id, title })
+  }
 
   return (
     <li
@@ -25,7 +29,7 @@ export const ActivityItemCard = ({
         {title}
       </h2>
       <div
-        onClick={(e) => e.stopPropagation()}
+        onClick={handleStopPropagation}
         className='flex justify-between  items-center'
       >
         <p
@@ -35,9 +39,7 @@ export const ActivityItemCard = ({
           {DateFormater(new Date(created_at))}
         </p>
         <ButtonDelete
-          onClick={() => {
-            actionDelete({ id, title });
-          }}
+          onClick={handleDelete}
           data-cy='activity-item-delete-button'
         />
       </div>

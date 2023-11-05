@@ -8,7 +8,7 @@ export const SortAndAdd = () => {
 
   const [isShowSorting, setIsShowSorting] = React.useState(false)
 
-  const [isShowModalForm, setIsShowModalForm] =  React.useState(false)
+  const [isShowModalForm, setIsShowModalForm] = React.useState(false)
 
   const handleToggleShowSorting = () => setIsShowSorting(prev => !prev)
 
@@ -16,7 +16,7 @@ export const SortAndAdd = () => {
 
   const handleCloseModal = () => setIsShowModalForm(false)
 
-  
+
   return (
     <>
       <div className='flex items-center gap-5' aria-label='button-wrapper'>
@@ -28,10 +28,11 @@ export const SortAndAdd = () => {
       </div>
 
       <ModalForm
-        ishow={isShowModalForm}
+        isShow={isShowModalForm}
         mode={'create'}
         onClose={handleCloseModal}
       />
+
     </>
 
   )

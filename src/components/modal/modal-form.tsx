@@ -1,15 +1,16 @@
 import React from 'react';
 import { SelectPriority } from '@/components/select-priority';
 import { useParams } from 'react-router-dom';
-import { Wrapper } from './wrapper';
+import { Teleport } from './teleport';
 import { cn } from '@/helpers/cn';
 import * as API from '@/apis/services/todo'
 
 import type { Priority } from '@/types';
+import { useClickOutside } from '@/hooks/use-clickoutside';
 
 
 type Props = {
-  ishow: boolean;
+  isShow: boolean
   mode: 'create' | 'update';
   todoData?: {
     id: number | null;
@@ -29,7 +30,7 @@ const initialTodo = {
   priority: 'very-high' as Priority
 }
 
-export const ModalForm = ({ ishow, mode, todoData, onClose }: Props) => {
+export const ModalForm = ({ isShow ,mode, todoData, onClose }: Props) => {
   const { id } = useParams();
 
   const { mutate: addTodo, isLoading: addTodoStatus } = API.useAddTodo()
@@ -94,14 +95,9 @@ export const ModalForm = ({ ishow, mode, todoData, onClose }: Props) => {
     if (mode === 'update') return handleUpdateTodo()
   };
 
-  // useClickOutside(wrapperRef, ishow ? onClose : () => { })
-
   return (
-    <Wrapper
-      isShow={ishow}
-    >
+    <Teleport show={isShow} onClose={onClose}>
       <div
-        ref={wrapperRef}
         className='rounded-md relative w-5/12 h-max bg-white'
         data-cy='modal-add'
       >
@@ -147,6 +143,6 @@ export const ModalForm = ({ ishow, mode, todoData, onClose }: Props) => {
           </button>
         </footer>
       </div>
-    </Wrapper>
+    </Teleport>
   );
 }

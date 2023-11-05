@@ -96,15 +96,14 @@ export default function Home() {
       </Layout>
 
       {/* Modal group */}
-      {modalDelete.confirm && (
-        <ModalDelete
-          isLoading={deleteActivityStatus === 'loading'}
-          text={'Apakah anda yakin menghapus activity'}
-          title={activity.title}
-          onDelete={handleDeleteActionActivity}
-          onCencel={handleCencelDeleteActivity}
-        />
-      )}
+      <ModalDelete
+        isShow={modalDelete.confirm}
+        isLoading={deleteActivityStatus === 'loading'}
+        text={'Apakah anda yakin menghapus activity'}
+        title={activity.title}
+        onDelete={handleDeleteActionActivity}
+        onCencel={handleCencelDeleteActivity}
+      />
 
       <ModalSuccess
         isShow={modalDelete.success}

@@ -1,9 +1,11 @@
 import React from 'react';
 import { AlertIcon } from '@/assets/icon/alertIcon';
-import { Wrapper } from './wrapper';
+import { Teleport } from './teleport';
 import { useClickOutside } from '@/hooks/use-clickoutside';
+import { cn } from '@/helpers/cn';
 
-interface Props {
+type Props = {
+  isShow: boolean
   title: string;
   text: string;
   isLoading: boolean;
@@ -13,16 +15,11 @@ interface Props {
 
 export const ModalDelete = (props: Props) => {
 
-  const { title, text, isLoading, onDelete, onCencel } = props
-
-  const wrapperRef = React.useRef<HTMLDivElement | null>(null)
-
-  useClickOutside(wrapperRef, onCencel)
+  const { isShow ,title, text, isLoading, onDelete, onCencel } = props
 
   return (
-    <Wrapper isShow>
+    <Teleport show={isShow} onClose={onCencel}>
       <div
-        ref={wrapperRef}
         className='rounded-md relative w-6/12 lg:w-4/12 h-max bg-white py-4'
         data-cy='modal-delete'
       >
@@ -47,15 +44,16 @@ export const ModalDelete = (props: Props) => {
           <button
             onClick={onDelete}
             disabled={isLoading}
-            className={
-              `py-2 px-7 rounded-full text-white font-semibold ${isLoading ? 'bg-rose-500/50' : 'bg-rose-500'
-              }`}
+            className={cn(
+              'py-2 px-7 rounded-full text-white font-semibold',
+              isLoading ? 'bg-rose-500/50' : 'bg-rose-500'
+            )}
             data-cy='modal-delete-confirm-button'
           >
             {isLoading ? 'loading' : 'Hapus'}
           </button>
         </div>
       </div>
-    </Wrapper>
+    </Teleport>
   );
 }
