@@ -80,8 +80,8 @@ export default function Home() {
             </h1>
             <ButtonAdd
               onClick={handleCreateActivity}
-              isLoading={createActivityStatus === 'loading'}
-              disabled={createActivityStatus === 'loading'}
+              // isLoading={createActivityStatus === 'loading'}
+              // disabled={createActivityStatus === 'loading'}
               data-cy='activity-add-button'
             />
           </div>
