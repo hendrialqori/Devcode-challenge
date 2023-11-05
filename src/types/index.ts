@@ -4,19 +4,15 @@ export type ActivityItem = {
   created_at: string;
 };
 
-export type PriorityType = 'very-high' | 'high' | 'normal' | 'low' | 'very-low';
-
-export type Todo = {
-  is_active: number | boolean;
-  priority: PriorityType;
-  actionDelete: (params: Pick<ActivityItem, 'id' | 'title'>) => void;
-  actionUpdate: (params: Pick<Todo, 'id' | 'title' | 'priority'>) => void;
-} & Omit<ActivityItem, 'created_at'>;
-
-
+export type Priority = 'very-high' | 'high' | 'normal' | 'low' | 'very-low';
 
 export type Activity = {
   id: number;
   title: string;
-  created_at: string;
+  created_at?: string;
+}
+
+export type Todo = Activity & {
+  is_active: number
+  priority: Priority
 }

@@ -1,14 +1,14 @@
 import { memo } from 'react';
 
 interface PriorityColor {
-  types: string;
+  type: string;
 }
 
-export const PriorityColorRound = memo(
-  ({ types }: PriorityColor): JSX.Element => {
+export const PriorityColor = memo(
+  ({ type }: PriorityColor): JSX.Element => {
     let priorityColor;
 
-    switch (types) {
+    switch (type) {
       case 'very-high':
         priorityColor = 'bg-rose-500';
         break;

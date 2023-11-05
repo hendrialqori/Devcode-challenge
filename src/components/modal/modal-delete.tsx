@@ -4,7 +4,7 @@ import { Wrapper } from './wrapper';
 import { useClickOutside } from '@/hooks/use-clickoutside';
 
 interface Props {
-  isOpen: boolean;
+  isShow: boolean;
   title: string;
   text: string;
   isLoading: boolean;
@@ -14,14 +14,14 @@ interface Props {
 
 export const ModalDelete = (props: Props) => {
 
-  const { isOpen, title, text, isLoading, onDelete, onCencel } = props
+  const { isShow, title, text, isLoading, onDelete, onCencel } = props
 
   const wrapperRef = React.useRef<HTMLDivElement | null>(null)
 
-  useClickOutside(wrapperRef, onCencel)
+  // useClickOutside(wrapperRef, onCencel)
 
   return (
-    <Wrapper isShow={isOpen} >
+    <Wrapper isShow={isShow} >
       <div
         ref={wrapperRef}
         className='rounded-md relative w-6/12 lg:w-4/12 h-max bg-white py-4'

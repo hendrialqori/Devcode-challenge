@@ -1,7 +1,7 @@
 import { request } from "../request";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { type SuccessRepsonse } from "@/types/global";
 import { type Activity } from "@/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { type AxiosError } from "axios";
 
 
@@ -13,6 +13,18 @@ export const useGetActivities = () => {
 
   return useQuery<Awaited<ReturnType<typeof GET>>, AxiosError<unknown>>({
     queryKey: ['ACTIVITIES'],
+    queryFn: GET
+  })
+}
+
+export const useGetActivity = ({ activity_id }: { activity_id: number }) => {
+  const GET = async (): Promise<Activity | undefined> => {
+    const req = await request.get('/activity-groups/' + activity_id )
+    return req.data
+  }
+
+  return useQuery<Awaited<ReturnType<typeof GET>>, AxiosError<unknown>>({
+    queryKey: ['ACTIVITY', activity_id],
     queryFn: GET
   })
 }
@@ -33,6 +45,26 @@ export const useAddActivity = () => {
   return useMutation({
     mutationFn: POST,
     onSuccess: () => queryClient.invalidateQueries(['ACTIVITIES'])
+  })
+}
+
+export const useUpdateActivity = () => {
+
+  type Params = {
+    id: number;
+    title: string
+  }
+
+  // const queryClient = useQueryClient()
+
+  const PUT = async ({ id, title }: Params) => {
+    const req = await request.patch(`/activity-groups/${id}`, { title })
+    return req.data
+  }
+
+  return useMutation({
+    mutationFn: PUT,
+    // onSuccess: () => queryClient.invalidateQueries(['ACTIVITIES'])
   })
 }
 

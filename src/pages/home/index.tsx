@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '@/template/layout';
 import { ButtonAdd } from '@/components/button/addButton';
-import { ModalSuccess } from '@/components/modal/sucessModal';
+import { ModalSuccess } from '@/components/modal/modal-success';
 import { ModalDelete } from '@/components/modal/modal-delete';
 import { Activities } from './components/activities';
 import * as API from '@/apis/services/activity'
@@ -32,26 +32,42 @@ export default function Home() {
     createActivity()
   }
 
+  const handleModalDelete = (type: keyof typeof modalDelete | 'reset') => {
+    switch(type) {
+      case 'confirm':
+        setModalDelete({...initialValueModalDelete, confirm: true})
+        break
+      case 'success':
+        setModalDelete({...initialValueModalDelete, success: true})
+        break
+      case 'reset':
+        setModalDelete(initialValueModalDelete)
+        break
+      default:
+        return false
+    }
+  }
+
   const handleDeleteActivity = (params: typeof activity) => {
     setActivity(params)
-    setModalDelete({ ...initialValueModalDelete, confirm: true })
+    handleModalDelete('confirm')
   }
 
   const handleCencelDeleteActivity = () => {
-    setModalDelete(initialValueModalDelete)
+    handleModalDelete('reset')
     setActivity(initialValueActivity)
   }
 
   const handleDeleteActionActivity = () => {
     deleteActivity({ id: activity.id as number }, {
       onSuccess: () => {
-        setModalDelete(initialValueModalDelete)
+        handleModalDelete('success')
        }
     })
   }
 
   const handleCloseModalSuccess = React.useCallback(() => {
-    setModalDelete(initialValueModalDelete)
+    handleModalDelete('reset')
   }, []);
 
   return (
@@ -81,7 +97,7 @@ export default function Home() {
 
       {/* Modal group */}
       <ModalDelete
-        isOpen={modalDelete.confirm}
+        isShow={modalDelete.confirm}
         isLoading={deleteActivityStatus === 'loading'}
         text={'Apakah anda yakin menghapus activity'}
         title={activity.title}
@@ -90,7 +106,7 @@ export default function Home() {
       />
 
       <ModalSuccess
-        isOpen={modalDelete.success}
+        isShow={modalDelete.success}
         onClose={handleCloseModalSuccess}
       />
     </>

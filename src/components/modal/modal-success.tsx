@@ -4,18 +4,18 @@ import { Wrapper } from './wrapper';
 import { useClickOutside } from '@/hooks/use-clickoutside';
 
 type Props = {
-  isOpen: boolean;
+  isShow: boolean;
   onClose: () => void
 }
 
-export const ModalSuccess = ({ isOpen, onClose}: Props) => {
+export const ModalSuccess = ({ isShow, onClose}: Props) => {
 
   const wrapperRef = React.useRef<HTMLDivElement | null>(null)
 
   useClickOutside(wrapperRef, onClose)
 
   return (
-    <Wrapper isShow={isOpen}>
+    <Wrapper isShow={isShow}>
       <div
         ref={wrapperRef}
         className='bg-white flex gap-3 items-center px-7 py-2 rounded-md z-10 h-max my-auto'

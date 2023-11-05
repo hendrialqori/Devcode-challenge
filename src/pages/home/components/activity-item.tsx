@@ -26,7 +26,7 @@ export const ActivityItem = ({ id, title, created_at, onDelete }: Props) => {
 
   return (
     <li
-      // onClick={handleNavigate(id)}
+      onClick={handleNavigate(id)}
       className='flex flex-col justify-between rounded-md shadow-md aspect-square p-5 bg-white cursor-pointer'
       data-cy='activity-item'
       role='button'
@@ -42,7 +42,7 @@ export const ActivityItem = ({ id, title, created_at, onDelete }: Props) => {
           className='text-sm font-semibold text-gray-400'
           data-cy='activity-item-date'
         >
-          {DateFormater(new Date(created_at))}
+          {DateFormater(new Date(created_at!))}
         </p>
         <ButtonDelete
           onClick={handleDeleteActivity}

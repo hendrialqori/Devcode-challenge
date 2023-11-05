@@ -18,7 +18,7 @@ export const Activities = ({ isLoading, data, onAddActivity, onDeleteActivity }:
   )
 
   if (data.length === 0) return (
-    <div className='h-full w-full flex justify-center items-start'>
+    <div className='h-[calc(100vh_-_200px)] w-full flex justify-center items-center'>
       <EmptyIcon
         onClick={onAddActivity
         } />

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import { CHOOSINGTYPESORT, TOGGLECHOOSINGSORT } from './reducers';
+import type { Priority } from '@/types';
 
 export type ActionTypes =
   | { type: typeof CHOOSINGTYPESORT; payload: string }

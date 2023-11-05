@@ -1,16 +1,14 @@
 import { SortIcon } from '@/assets/icon/sortIcon';
 
-interface ButtonSortedProps {
-  clickHandlers: any;
+type Props = {
+  onClick: () => void
 }
 
-export const ButtonSorted = ({
-  clickHandlers,
-}: ButtonSortedProps): JSX.Element => {
+export const ButtonSorted = ({ onClick }: Props)=> {
   return (
     <button
       data-cy='todo-sort-button'
-      onClick={clickHandlers}
+      onClick={onClick}
       className='border-[1px] border-gray-300 rounded-full'
     >
       <SortIcon />
