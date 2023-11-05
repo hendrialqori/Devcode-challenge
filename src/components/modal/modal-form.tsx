@@ -102,7 +102,7 @@ export const ModalForm = ({ ishow, mode, todoData, onClose }: Props) => {
     >
       <div
         ref={wrapperRef}
-        className='rounded-md relative w-6/12 h-max bg-white'
+        className='rounded-md relative w-5/12 h-max bg-white'
         data-cy='modal-add'
       >
         <header className='flex items-center justify-between p-5 border-b-[1px] border-gray-300'>
@@ -111,7 +111,7 @@ export const ModalForm = ({ ishow, mode, todoData, onClose }: Props) => {
             ✕
           </button>
         </header>
-        <section className='p-5 border-b-[1px] grid gap-6'>
+        <section className='p-5 border-b-[1px] grid gap-5'>
           <div className='grid gap-2 '>
             <label className='text-xs font-semibold mb-2' htmlFor='t'>
               Nama List Item
@@ -135,7 +135,7 @@ export const ModalForm = ({ ishow, mode, todoData, onClose }: Props) => {
         </section>
         <footer className='px-5 py-4 text-right'>
           <button
-            disabled={addTodoStatus || updateTodoStatus}
+            disabled={addTodoStatus || updateTodoStatus || !todo.title.length}
             onClick={handleSumbmitForm}
             className={cn(
               'py-2 px-5 rounded-full text-white',
