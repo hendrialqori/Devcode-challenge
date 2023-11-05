@@ -103,12 +103,14 @@ export const Todos = () => {
   }, [todos?.data, state.chooseTypeSorted])
 
 
+  const handleStopPropagation = (e: React.MouseEvent<HTMLUListElement>) => e.stopPropagation()
+
   return (
     <>
       {
         todos?.data.length === 0
           ? <EmptyTodos onClick={handleCreateTodo} />
-          : <ul className='my-10'>
+          : <ul className='my-10' onClick={handleStopPropagation}>
             {todosFiltering?.map((todo, i) => (
               <TodoItem
                 key={i}
@@ -127,14 +129,15 @@ export const Todos = () => {
         onClose={handleResetModalState}
       />
 
-      <ModalDelete
-        isShow={isShowModalDelete}
-        text='Apakah anda yakin menghapus List Item'
-        title={todo.title}
-        isLoading={deleteTodoStatus}
-        onDelete={handleDelete}
-        onCencel={handleResetModalState}
-      />
+      {isShowModalDelete && (
+        <ModalDelete
+          text='Apakah anda yakin menghapus List Item'
+          title={todo.title}
+          isLoading={deleteTodoStatus}
+          onDelete={handleDelete}
+          onCencel={handleResetModalState}
+        />
+      )}
 
       <ModalSuccess
         isShow={isOpenModalSuccess}

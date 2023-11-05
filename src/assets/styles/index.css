@@ -7,12 +7,3 @@
     @apply w-9/12 mx-auto;
   }
 }
-
-body {
-  box-shadow: 0 0 0 100vmax #f3f3f3;
-  background-color: #f3f3f3;
-}
-
-#modal-add-portal {
-  position: fixed;
-}

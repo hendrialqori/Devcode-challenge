@@ -33,12 +33,12 @@ export default function Home() {
   }
 
   const handleModalDelete = (type: keyof typeof modalDelete | 'reset') => {
-    switch(type) {
+    switch (type) {
       case 'confirm':
-        setModalDelete({...initialValueModalDelete, confirm: true})
+        setModalDelete({ ...initialValueModalDelete, confirm: true })
         break
       case 'success':
-        setModalDelete({...initialValueModalDelete, success: true})
+        setModalDelete({ ...initialValueModalDelete, success: true })
         break
       case 'reset':
         setModalDelete(initialValueModalDelete)
@@ -62,7 +62,7 @@ export default function Home() {
     deleteActivity({ id: activity.id as number }, {
       onSuccess: () => {
         handleModalDelete('success')
-       }
+      }
     })
   }
 
@@ -96,14 +96,15 @@ export default function Home() {
       </Layout>
 
       {/* Modal group */}
-      <ModalDelete
-        isShow={modalDelete.confirm}
-        isLoading={deleteActivityStatus === 'loading'}
-        text={'Apakah anda yakin menghapus activity'}
-        title={activity.title}
-        onDelete={handleDeleteActionActivity}
-        onCencel={handleCencelDeleteActivity}
-      />
+      {modalDelete.confirm && (
+        <ModalDelete
+          isLoading={deleteActivityStatus === 'loading'}
+          text={'Apakah anda yakin menghapus activity'}
+          title={activity.title}
+          onDelete={handleDeleteActionActivity}
+          onCencel={handleCencelDeleteActivity}
+        />
+      )}
 
       <ModalSuccess
         isShow={modalDelete.success}
