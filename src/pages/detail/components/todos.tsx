@@ -81,9 +81,9 @@ export const Todos = () => {
 
     switch (sortType) {
       case 'Terbaru':
-        return temp?.sort((a, b) => a.id - b.id);
-      case 'Terlama':
         return temp?.sort((a, b) => b.id - a.id);
+      case 'Terlama':
+        return temp?.sort((a, b) => a.id - b.id);
       case 'A-Z':
         return temp?.sort((a, b) =>
           a.title.localeCompare(b.title)
