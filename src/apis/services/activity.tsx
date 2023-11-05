@@ -19,7 +19,7 @@ export const useGetActivities = () => {
 
 export const useGetActivity = ({ activity_id }: { activity_id: number }) => {
   const GET = async (): Promise<Activity | undefined> => {
-    const req = await request.get('/activity-groups/' + activity_id )
+    const req = await request.get('/activity-groups/' + activity_id)
     return req.data
   }
 
@@ -44,7 +44,11 @@ export const useAddActivity = () => {
 
   return useMutation({
     mutationFn: POST,
-    onSuccess: () => queryClient.invalidateQueries(['ACTIVITIES'])
+    onSuccess: () => {
+      setTimeout(() => {
+        queryClient.invalidateQueries(['ACTIVITIES'])
+      }, 200)
+    }
   })
 }
 
