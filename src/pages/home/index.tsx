@@ -86,7 +86,6 @@ export default function Home() {
             />
           </div>
           <Activities
-            isLoading={activitiesStatus === 'loading'}
             data={activities?.data ?? []}
             onAddActivity={handleCreateActivity}
             onDeleteActivity={handleDeleteActivity}

@@ -5,17 +5,12 @@ import { EmptyIcon } from '@/assets/icon/emptyIcon';
 type Params = Pick<Activity, 'id' | 'title'>
 
 type Props = {
-  isLoading: boolean;
   data: Activity[];
   onAddActivity: () => void
   onDeleteActivity: (params: Params) => void;
 }
 
-export const Activities = ({ isLoading, data, onAddActivity, onDeleteActivity }: Props) => {
-
-  if (isLoading) return (
-    <div className='h-screen bg-gray-100' />
-  )
+export const Activities = ({ data, onAddActivity, onDeleteActivity }: Props) => {
 
   if (data.length === 0) return (
     <div className='h-[calc(100vh_-_200px)] w-full flex justify-center items-center'>
