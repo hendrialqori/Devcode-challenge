@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '@/template/layout';
-import { ButtonAdd } from '@/components/button/addButton';
+import { ButtonAdd } from '@/components/button/button-add';
 import { ModalSuccess } from '@/components/modal/modal-success';
 import { ModalDelete } from '@/components/modal/modal-delete';
 import { Activities } from './components/activities';
@@ -21,8 +21,6 @@ export default function Home() {
   const [activity, setActivity] = React.useState(initialValueActivity)
 
   const [modalDelete, setModalDelete] = React.useState(initialValueModalDelete)
-
-  const { data: activities, status: activitiesStatus } = API.useGetActivities()
 
   const { mutate: createActivity, status: createActivityStatus } = API.useAddActivity()
 
@@ -86,7 +84,6 @@ export default function Home() {
             />
           </div>
           <Activities
-            data={activities?.data ?? []}
             onAddActivity={handleCreateActivity}
             onDeleteActivity={handleDeleteActivity}
           />

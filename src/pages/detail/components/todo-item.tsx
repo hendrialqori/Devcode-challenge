@@ -1,7 +1,7 @@
 import React from 'react';
 import { PriorityColor } from '@/components/priority-color';
 import { useMutation } from '@tanstack/react-query';
-import { ButtonDelete } from '@/components/button/deleteButton';
+import { ButtonDelete } from '@/components/button/button-delete';
 import { useStoreContext } from '@/context/store';
 import { useUpdateTodo } from '@/apis/services/todo';
 import { PencilIcon } from '@/assets/icon/penciIcon';

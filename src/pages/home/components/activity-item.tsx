@@ -1,6 +1,6 @@
-import { DateFormater } from '@/utils/dateFormater';
+import { dateFormater } from '@/utils/dateFormater';
 import { useNavigate } from 'react-router-dom';
-import { ButtonDelete } from '@/components/button/deleteButton';
+import { ButtonDelete } from '@/components/button/button-delete';
 import type { Activity } from '@/types';
 
 
@@ -42,7 +42,7 @@ export const ActivityItem = ({ id, title, created_at, onDelete }: Props) => {
           className='text-sm font-semibold text-gray-400'
           data-cy='activity-item-date'
         >
-          {DateFormater(new Date(created_at!))}
+          {dateFormater(new Date(created_at!))}
         </p>
         <ButtonDelete
           onClick={handleDeleteActivity}

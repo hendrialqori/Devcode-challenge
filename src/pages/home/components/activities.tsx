@@ -1,29 +1,31 @@
-import type { Activity } from '@/types';
 import { ActivityItem } from './activity-item';
 import { EmptyIcon } from '@/assets/icon/emptyIcon';
+import { useGetActivities } from '@/apis/services/activity';
+import type { Activity } from '@/types';
 
 type Params = Pick<Activity, 'id' | 'title'>
 
 type Props = {
-  data: Activity[];
   onAddActivity: () => void
   onDeleteActivity: (params: Params) => void;
 }
 
-export const Activities = ({ data, onAddActivity, onDeleteActivity }: Props) => {
+export const Activities = ({ onAddActivity, onDeleteActivity }: Props) => {
 
-  if (data.length === 0) return (
+  const { data: activities, status: activitiesStatus } = useGetActivities()
+
+  if (activities?.data.length === 0) return (
     <div className='h-[calc(100vh_-_200px)] w-full flex justify-center items-center'>
       <EmptyIcon
-        onClick={onAddActivity
-        } />
+        onClick={onAddActivity}
+      />
     </div>
   )
 
   return (
     <ul className='mt-14 grid grid-cols-4 gap-3'>
       {
-        data.map((activity, i) => (
+        activities?.data.map((activity, i) => (
           <ActivityItem
             key={i}
             {...activity}

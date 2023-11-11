@@ -1,5 +1,5 @@
 import React from 'react';
-import { TodoItem } from '@/components/card/todo-item';
+import { TodoItem } from '@/pages/detail/components/todo-item';
 import { useStoreContext } from '@/context/store';
 import { ModalDelete } from '@/components/modal/modal-delete';
 import { EmptyTodos } from '@/components/empty-todos';
