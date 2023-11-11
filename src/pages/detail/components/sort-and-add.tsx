@@ -1,6 +1,6 @@
 import React from "react";
 import { ButtonAdd } from "@/components/button/button-add";
-import { ButtonSorted } from "@/components/button/sortedButton";
+import { ButtonSorted } from "@/components/button/button-sorted";
 import { SortTodo } from "@/components/sort-todo";
 import { ModalForm } from "@/components/modal/modal-form";
 
