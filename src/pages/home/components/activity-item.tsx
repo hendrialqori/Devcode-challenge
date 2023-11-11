@@ -30,7 +30,7 @@ export const ActivityItem = ({ id, title, created_at, onDelete }: Props) => {
       className='flex flex-col justify-between rounded-md shadow-md aspect-square p-5 bg-white cursor-pointer'
       data-cy='activity-item'
       role='button'
-      tabIndex={-1}
+      tabIndex={0}
     >
       <h2
         className='font-bold text-lg'
