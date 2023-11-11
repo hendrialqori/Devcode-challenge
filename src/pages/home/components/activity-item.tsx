@@ -1,4 +1,4 @@
-import { dateFormater } from '@/utils/dateFormater';
+import { dateFormater } from '@/utils/date-formater';
 import { useNavigate } from 'react-router-dom';
 import { ButtonDelete } from '@/components/button/button-delete';
 import type { Activity } from '@/types';
